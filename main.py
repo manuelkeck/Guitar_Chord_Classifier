@@ -1,5 +1,5 @@
-from sources.AudioInterface import AudioInterface
-from sources.AudioStreamPyaudio import AudioRecorder
+from sources.usb_handler.InitAudioInterface import AudioInterface
+from sources.audiostream_handler.AudioStream import AudioRecorder
 from sources.TestVisualization import TestVisualization
 
 

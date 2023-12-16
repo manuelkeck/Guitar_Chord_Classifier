@@ -1,3 +1,7 @@
 sources/__pycache__/
 venv/*
 .DS_Store
+.idea/
+gcdenv/
+sources/audiostream_handler/__pycache__/
+sources/usb_handler/__pycache__/

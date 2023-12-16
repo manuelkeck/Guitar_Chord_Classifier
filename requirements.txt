@@ -1,0 +1,7 @@
+numpy
+matplotlib
+pyaudio
+wavio
+scipy
+pyusb
+sounddevice
