@@ -51,11 +51,11 @@ class CNN(object):
         print('Loading saved model')
         # load json and create model
         try:
-            with open(MODEL_JSON, "r") as json_file:
+            with open("models/chord_audio_detector/model.json", "r") as json_file:
                 loaded_model_json = json_file.read()
             loaded_model = model_from_json(loaded_model_json)
             # load weights into new model
-            loaded_model.load_weights(MODEL_H5)
+            loaded_model.load_weights("models/chord_audio_detector/model.h5")
             loaded_model.compile(
                 optimizer="Adam",
                 loss="categorical_crossentropy",
@@ -67,9 +67,21 @@ class CNN(object):
             # logger.info("Model not found")
             print("Model not found")
 
+    def load_model2(self):
+        try:
+            print("Loading saved model...")
+            # load json and create model
+            json_file = open('models/chord_audio_detector/model.json', 'r')
+            loaded_model_json = json_file.read()
+            json_file.close()
+            loaded_model = model_from_json(loaded_model_json)
+            # load weights into new model
+            loaded_model.load_weights("models/chord_audio_detector/model.h5")
+            print("Loaded model from disk")
+        except:
+            print("Model not loaded.")
+
     def predict(self, filepath, loadmodel=True):
-        # logger.info('Prediction')
-        print('Prediction')
         if loadmodel:
             # self.load_model()
             pass
@@ -78,16 +90,12 @@ class CNN(object):
             y, sr = librosa.load(filepath, duration=2)
             ps = librosa.feature.melspectrogram(y=y, sr=sr, )
             px = ps
-            px
             shape = (1,) + self.input_shape
             ps = np.array(ps.reshape(shape))
-            # predictions = self.model.predict_classes(ps)
             predictions_tmp = self.model.predict(ps)
             predictions = predictions_tmp.argmax(axis=-1)
             class_id = predictions[0]
             chord = str(CLASSES[class_id])
-            # logger.info("The recorded chord is " + chord)
-            print("The recorded chord is " + chord)
         # except:
         # logger.info("File note found")
         # chord = "N/A"
