@@ -1,3 +1,8 @@
+"""
+This code is based on https://github.com/ayushkumarshah/Guitar-Chords-recognition
+with some modifications.
+"""
+
 import os
 
 # The Root Directory of the project
