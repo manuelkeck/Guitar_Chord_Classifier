@@ -2,7 +2,7 @@ import librosa
 import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
-from sources.chord_detection.ChordDetectionCNN import CNN
+from sources.chord_detection.CNNHandler import CNN
 
 
 def init_model():
