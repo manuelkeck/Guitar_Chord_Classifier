@@ -4,7 +4,7 @@ The main objective of this project is to create an own dataset with images from 
 To achieve this, an existing guitar chord detection is integrated.
 If a chord was detected successfully, an image will be created, labelled and stored.
 
-For chord detection this project was integrated: // link zu github
+For chord detection parts of this project were integrated: https://github.com/ayushkumarshah/Guitar-Chords-recognition
 
 After collection of a meaningful sum of images (separated in training and validation datasets), an own Convolutional Neural Network (CNN) will be trained, based on the created dataset.
 
