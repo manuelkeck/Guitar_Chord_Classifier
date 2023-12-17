@@ -5,3 +5,6 @@ wavio
 scipy
 pyusb
 sounddevice
+librosa
+keras
+autochord
