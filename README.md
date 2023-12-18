@@ -12,7 +12,7 @@ After collection of a meaningful sum of images (separated in training and valida
 ## Getting started
 
 ### Install libraries
-To get all needed libraries, create a virtual environment (e.g. gcdenv) and execute `pip install -r requirements.txt` within.
+To get all needed libraries, create a virtual environment and execute `pip install -r requirements.txt`.
 
 ## Usage
 Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.

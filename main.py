@@ -12,8 +12,8 @@ def show_test_visualization():
 
 
 def show_plot_spectogram():
-    file_path = "data/records/Major_0.wav"
-    # file_path = "data/records/record-20231207-212628.wav"
+    # file_path = "data/records/Major_0.wav"
+    file_path = "data/records/record-20231207-212628.wav"
     cd = ChordDetector(file_path)
     # cd.plot_spectogram()
     # cd.recognize_chord()
