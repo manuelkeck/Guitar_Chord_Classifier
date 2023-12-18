@@ -4,6 +4,6 @@ venv/*
 .idea/
 gcdenv/
 sources/audiostream_handler/__pycache__/
-sources/usb_handler/__pycache__/
+sources/device_handler/__pycache__/
 sources/chord_detection/__pycache__/
 

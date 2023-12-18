@@ -7,4 +7,4 @@ pyusb
 sounddevice
 librosa
 keras
-autochord
+usb

@@ -1,4 +1,4 @@
-from sources.usb_handler.InitAudioInterface import AudioInterface
+from sources.device_handler.AudioInterface import AudioInterface
 from sources.audiostream_handler.AudioStream import AudioRecorder
 from sources.TestVisualization import TestVisualization
 from sources.chord_detection.ChordDetector import ChordDetector

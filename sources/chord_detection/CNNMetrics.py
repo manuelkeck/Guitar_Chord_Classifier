@@ -1,4 +1,7 @@
-import keras
+"""
+This code is based on https://github.com/ayushkumarshah/Guitar-Chords-recognition.
+"""
+
 from keras import backend as K
 
 def precision(y_true, y_pred):

@@ -1,6 +1,7 @@
 import usb.core
-from usb.util import get_string
 import sounddevice as sd
+
+from usb.util import get_string
 
 
 class AudioInterface:
