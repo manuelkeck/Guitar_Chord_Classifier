@@ -5,7 +5,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 
 
-class AudioRecorder:
+class AudioStream:
     def __init__(self, device_index, sample_rate=44100, duration=5):
         self.device_index = device_index
         self.sample_rate = sample_rate
@@ -48,6 +48,8 @@ class AudioRecorder:
 
             print(f"Recording saved as {record_filename}")
             self.visualize_audio(recorded_data, record_filename)
+
+            return record_filename
 
         finally:
             self.stream.stop_stream()

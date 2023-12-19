@@ -1,7 +1,7 @@
 import cv2
 
 from sources.device_handler.AudioInterface import AudioInterface
-from sources.audiostream_handler.AudioStream import AudioRecorder
+from sources.audiostream_handler.AudioStream import AudioStream
 from sources.TestVisualization import plot_spectogram, plot_spectogram2
 from sources.chord_detection.ChordDetector import ChordDetector
 from sources.device_handler.Camera import Camera
@@ -18,7 +18,7 @@ def get_chord_capture_image(recorded_audio_path, camera):
     cd = ChordDetector(recorded_audio_path, camera)
     chord = cd.classify_chord()
     if chord in CLASSES:
-        print(f"Recorded chord is: {chord}. Image will be captured.")
+        print(f"Recorded chord is: {chord}. \nImage will be captured.")
         image_path = camera.capture_image(recorded_audio_path)
         print(f"Image stored here: {image_path}")
 
@@ -36,9 +36,9 @@ def main():
 
     # Record audio if audio interface was found
     if device is not None and index is not None:
-        audio_stream = AudioRecorder(index)
-        audio_stream.record_audio()
-        # todo: return value recorded audio path
+        audio_stream = AudioStream(index)
+        recorded_audio_path = audio_stream.record_audio()
+        print(f"Recorded audio stored here: {recorded_audio_path}")
 
     # Temporary hardcoded paths to recorded audio (testing)
     # recorded_audio_path = "data/records/record-20231207-212628.wav"
