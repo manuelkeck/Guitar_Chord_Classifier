@@ -1,34 +1,55 @@
+import cv2
+
 from sources.device_handler.AudioInterface import AudioInterface
 from sources.audiostream_handler.AudioStream import AudioRecorder
-from sources.TestVisualization import TestVisualization
+from sources.TestVisualization import plot_spectogram, plot_spectogram2
 from sources.chord_detection.ChordDetector import ChordDetector
+from sources.device_handler.Camera import Camera
+from sources.Settings import CLASSES
 
 
-def show_test_visualization():
-    sample_rate = 44100
-    visualizer = TestVisualization(sample_rate)
-    file_path = "data/records/record-20231207-212628.wav"
-    visualizer.visualize_chord(file_path)
+def show_spectogram(recorded_audio_path):
+    print("Show mel-spectogram of audio")
+    # plot_spectogram(recorded_audio_path)
+    # plot_spectogram2(recorded_audio_path)
 
 
-def show_plot_spectogram():
-    # file_path = "data/records/Major_0.wav"
-    file_path = "data/records/record-20231207-212628.wav"
-    cd = ChordDetector(file_path)
-    # cd.plot_spectogram()
-    # cd.recognize_chord()
-    cd.classify_chord()
+def get_chord_capture_image(recorded_audio_path, camera):
+    cd = ChordDetector(recorded_audio_path, camera)
+    chord = cd.classify_chord()
+    if chord in CLASSES:
+        print(f"Recorded chord is: {chord}. Image will be captured.")
+        image_path = camera.capture_image(recorded_audio_path)
+        print(f"Image stored here: {image_path}")
 
 
 def main():
+    # Init audio interface and builtin webcam
     device, index = AudioInterface.find_device()
+    webcam = Camera()
 
+    while not webcam.is_opened():
+        print("Waiting for webcam...")
+        cv2.waitKey(1000)
+        webcam.release()
+        webcam = Camera()
+
+    # Record audio if audio interface was found
     if device is not None and index is not None:
         audio_stream = AudioRecorder(index)
         audio_stream.record_audio()
+        # todo: return value recorded audio path
 
-    # show_test_visualization()
-    show_plot_spectogram()
+    # Temporary hardcoded paths to recorded audio (testing)
+    # recorded_audio_path = "data/records/record-20231207-212628.wav"
+    # recorded_audio_path = "data/records/Major_0.wav"
+    recorded_audio_path = "data/records/record-20231207-212459.wav"
+
+    # Show (mel-)spectogram of recorded audio
+    show_spectogram(recorded_audio_path)
+
+    # Find chord (record = CNN input, chord = CNN output) and capture image
+    get_chord_capture_image(recorded_audio_path, webcam)
 
 
 if __name__ == '__main__':

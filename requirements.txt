@@ -8,3 +8,4 @@ sounddevice
 librosa
 keras
 usb
+opencv-python
