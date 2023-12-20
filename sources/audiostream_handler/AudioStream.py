@@ -12,6 +12,7 @@ class AudioStream:
         self.duration = duration
         self.recorded_data = b''
         self.stream = ''
+        self.record_filename = ""
 
     def record_audio(self, sample_rate=44100, duration=5):
         """
@@ -39,22 +40,22 @@ class AudioStream:
             print("Recording finished.")
 
             # Convert frames to a numpy array
-            recorded_data = np.concatenate(frames, axis=0)
+            self.recorded_data = np.concatenate(frames, axis=0)
 
             # Save recorded data as .wav file
             timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-            record_filename = f'data/records/record-{timestamp}.wav'
-            wavio.write(record_filename, recorded_data.astype(np.int16), sample_rate)
+            self.record_filename = f'data/records/record-{timestamp}.wav'
+            wavio.write(self.record_filename, self.recorded_data.astype(np.int16), sample_rate)
 
-            print(f"Recording saved as {record_filename}")
-            self.visualize_audio(recorded_data, record_filename)
-
-            return record_filename
+            print(f"Recording saved as {self.record_filename}")
+            self.visualize_audio(self.recorded_data, self.record_filename)
 
         finally:
             self.stream.stop_stream()
             self.stream.close()
             p.terminate()
+
+        return self.record_filename
 
     def visualize_audio(self, audio_data, title):
         """
