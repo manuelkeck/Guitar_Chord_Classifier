@@ -1,4 +1,5 @@
 import cv2
+import tkinter as tk
 
 from sources.device_handler.AudioInterface import AudioInterface
 from sources.audiostream_handler.AudioStream import AudioStream
@@ -6,6 +7,8 @@ from sources.TestVisualization import plot_spectogram, plot_spectogram2
 from sources.chord_detection.ChordDetector import ChordDetector
 from sources.device_handler.Camera import Camera
 from sources.Settings import CLASSES
+from sources.user_interface.GUIApp import GUIApp
+from sources.user_interface.GUIAppController import GUIAppController
 
 
 def show_spectogram(recorded_audio_path):
@@ -24,7 +27,7 @@ def get_chord_capture_image(recorded_audio_path, camera):
 
 
 def main():
-    # Init audio interface and builtin webcam
+    # Init audio interface and built-in webcam
     device, index = AudioInterface.find_device()
     webcam = Camera()
 
@@ -33,6 +36,13 @@ def main():
         cv2.waitKey(1000)
         webcam.release()
         webcam = Camera()
+
+    # Open graphical user interface after init complete
+    root = tk.Tk()
+    app = GUIApp(root)
+    # Following line needed that GUIAppController can access GUIApp attributes
+    GUIAppController.gui_app = app
+    root.mainloop()
 
     # Record audio if audio interface was found
     if device is not None and index is not None:

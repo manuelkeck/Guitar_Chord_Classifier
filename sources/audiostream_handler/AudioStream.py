@@ -1,8 +1,9 @@
 import pyaudio
 import numpy as np
 import wavio
-from datetime import datetime
 import matplotlib.pyplot as plt
+
+from datetime import datetime
 
 
 class AudioStream:
@@ -15,12 +16,6 @@ class AudioStream:
         self.record_filename = ""
 
     def record_audio(self, sample_rate=44100, duration=5):
-        """
-
-        :param sample_rate:
-        :param duration:
-        :return:
-        """
         p = pyaudio.PyAudio()
 
         try:
@@ -70,7 +65,7 @@ class AudioStream:
         # Apply Fourier Transform to get the frequency spectrum
         freq_spectrum = np.fft.fft(audio_data)
         freq_values = np.fft.fftfreq(len(freq_spectrum), 1 / self.sample_rate)
-        freq_values = freq_values[:len(freq_spectrum) // 2]  # Use only positive frequencies
+        freq_values = freq_values[:len(freq_spectrum) // 2]
 
         # Plot the frequency spectrum
         plt.figure(figsize=(10, 4))

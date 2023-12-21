@@ -9,3 +9,4 @@ librosa
 keras
 usb
 opencv-python
+tensorflow

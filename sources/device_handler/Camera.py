@@ -30,6 +30,6 @@ class Camera:
 
         # Save the single captured frame as an image
         image_path = os.path.join(image_directory, f"{image_name}{file_extension}")
-        cv2.imwrite(image_path, frame, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
+        # cv2.imwrite(image_path, frame, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
 
         return image_path
