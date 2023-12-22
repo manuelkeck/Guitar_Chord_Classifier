@@ -7,6 +7,8 @@ from sources.user_interface.GUIAppController import GUIAppController
 
 class GUIApp:
     def __init__(self, root):
+
+
         self.root = root
         self.root.title("Recording Tool")
         # root.resizable(False, False)
@@ -45,7 +47,10 @@ class GUIApp:
         self.output_label = ttk.Label(self.right_frame, text="Output Label")
         self.output_label.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
 
-        self.discard_button = ttk.Button(self.right_frame, text="Discard")
+        self.specto_button = ttk.Button(self.right_frame, text="Spectogram", width=10, command=self.spectogram)
+        self.specto_button.grid(row=1, column=0, padx=5, pady=5, sticky="sw")
+
+        self.discard_button = ttk.Button(self.right_frame, text="Discard", width=10)
         self.discard_button.grid(row=2, column=0, padx=5, pady=5, sticky="sw")
 
         # Quit
@@ -64,3 +69,6 @@ class GUIApp:
 
     def start_recording(self):
         self.controller.start_chord_detection()
+
+    def spectogram(self):
+        self.controller.show_spectogram()

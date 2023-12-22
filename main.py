@@ -1,18 +1,13 @@
-import cv2
 import tkinter as tk
 
-from sources.device_handler.AudioInterface import AudioInterface
-from sources.audiostream_handler.AudioStream import AudioStream
 from sources.TestVisualization import plot_spectogram, plot_spectogram2
 from sources.chord_detection.ChordDetector import ChordDetector
-from sources.device_handler.Camera import Camera
 from sources.Settings import CLASSES
 from sources.user_interface.GUIApp import GUIApp
-from sources.user_interface.GUIAppController import GUIAppController
 
 
 def show_spectogram(recorded_audio_path):
-    print("Show mel-spectogram of audio")
+    print("Showing mel-spectogram of audio")
     plot_spectogram(recorded_audio_path)
     plot_spectogram2(recorded_audio_path)
 

@@ -8,9 +8,8 @@ def init_model():
 
 
 class ChordDetector:
-    def __init__(self, path, webcam):
+    def __init__(self, path):
         self.file_path = path
-        self.webcam = webcam
 
     def classify_chord(self):
         cnn = init_model()

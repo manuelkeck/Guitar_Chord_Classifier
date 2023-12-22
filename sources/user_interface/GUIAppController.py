@@ -3,11 +3,14 @@ from sources.device_handler.Camera import Camera
 from sources.audiostream_handler.AudioStream import AudioStream
 from sources.chord_detection.ChordDetector import ChordDetector
 from sources.Settings import CLASSES
+from sources.TestVisualization import plot_spectogram, plot_spectogram2
 
 
 class GUIAppController:
     def __init__(self, gui_app):
         self.gui_app = gui_app
+        self.latest_audio_path = "data/records/Major_0.wav"
+        self.latest_image_path = ""
 
     def start_chord_detection(self):
         print("Record button clicked")
@@ -21,18 +24,20 @@ class GUIAppController:
         # Record audio if audio interface was found
         if device is not None and index is not None:
             audio_stream = AudioStream(index)
-            recorded_audio_path = audio_stream.record_audio()
-            print(f"Recorded audio stored here: {recorded_audio_path}")
-
-        # Temporary hardcoded paths to recorded audio (testing)
-        recorded_audio_path = "data/records/Major_0.wav"
+            self.latest_audio_path = audio_stream.record_audio()
+            print(f"Recorded audio stored here: {self.latest_audio_path}")
 
         # Find chord (record = CNN input, chord = CNN output) and capture image
-        cd = ChordDetector(recorded_audio_path, webcam)
+        cd = ChordDetector(self.latest_audio_path)
         chord = cd.classify_chord()
         if chord in CLASSES:
             print(f"Recorded chord is: {chord}. \nImage will be captured.")
-            image_path = webcam.capture_image(recorded_audio_path)
-            print(f"Image stored here: {image_path}")
+            self.latest_image_path = webcam.capture_image(self.latest_audio_path)
+            print(f"Image stored here: {self.latest_image_path}")
 
         self.gui_app.record_button["state"] = "normal"
+
+    def show_spectogram(self):
+        print("Showing mel-spectogram of audio")
+        #plot_spectogram(self.latest_audio_path)
+        plot_spectogram2(self.latest_audio_path)
