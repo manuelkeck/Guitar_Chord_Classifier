@@ -7,12 +7,9 @@ from sources.user_interface.GUIAppController import GUIAppController
 
 class GUIApp:
     def __init__(self, root):
-
-
         self.root = root
         self.root.title("Recording Tool")
         # root.resizable(False, False)
-        # self.controller = controller
 
         # Windows size and positioning (based on main screen)
         window_width = 960
@@ -27,7 +24,7 @@ class GUIApp:
         style.configure("TFrame", background="black")
         style.configure("TButton", padding=6, relief="flat", background="#d9d9d9")
 
-        # Left frame
+        # Left frame #######################################################
         self.left_frame = tk.Frame(root, width=480, height=500, bg="red")
         self.left_frame.grid(row=0, column=0, sticky="nsew")
 
@@ -37,7 +34,7 @@ class GUIApp:
         self.camera_label = ttk.Label(self.left_frame, text="Camera Label")
         self.camera_label.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
 
-        # Right frame
+        # Right frame #######################################################
         self.right_frame = tk.Frame(root, width=480, height=500, bg="green")
         self.right_frame.grid(row=0, column=1, sticky="nsew")
 
@@ -53,11 +50,11 @@ class GUIApp:
         self.discard_button = ttk.Button(self.right_frame, text="Discard", width=10)
         self.discard_button.grid(row=2, column=0, padx=5, pady=5, sticky="sw")
 
-        # Quit
+        # Quit ############################################################
         self.quit_button = ttk.Button(self.root, text="Quit", command=root.destroy)
         self.quit_button.grid(row=2, column=0, padx=5, pady=5, sticky="sw")
 
-        # Record
+        # Record ##########################################################
         self.record_button = ttk.Button(self.root, text="Record", command=self.start_recording)
         self.record_button.grid(row=2, column=1, padx=5, pady=5, sticky="se")
 

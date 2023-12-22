@@ -39,5 +39,5 @@ class GUIAppController:
 
     def show_spectogram(self):
         print("Showing mel-spectogram of audio")
-        #plot_spectogram(self.latest_audio_path)
+        # plot_spectogram(self.latest_audio_path)
         plot_spectogram2(self.latest_audio_path)
