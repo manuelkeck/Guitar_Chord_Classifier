@@ -13,8 +13,6 @@ class GUIAppController:
         self.latest_image_path = ""
 
     def start_chord_detection(self):
-        print("Record button clicked")
-
         self.gui_app.record_button["state"] = "disabled"
 
         # Init audio interface and built-in webcam
@@ -26,7 +24,7 @@ class GUIAppController:
             audio_stream = AudioStream(index)
             self.latest_audio_path = audio_stream.record_audio()
             print(f"Recorded audio stored here: {self.latest_audio_path}")
-            self.add_text(f"Recorded audio stored here: {self.latest_audio_path}")
+            self.add_text(f"Record: Recorded audio stored here: {self.latest_audio_path}")
 
         else:
             self.latest_audio_path = "data/records/Major_0.wav"
@@ -36,26 +34,26 @@ class GUIAppController:
         chord = cd.classify_chord()
         if chord in CLASSES:
             print(f"Recorded chord is: {chord}. \nImage will be captured.")
-            self.add_text(f"Recorded chord is: {chord}. \nImage will be captured.")
+            self.add_text(f"Record: Recorded chord is: {chord}. \nImage will be captured.")
             try:
                 self.latest_image_path = webcam.capture_image(self.latest_audio_path)
                 print(f"Image stored here: {self.latest_image_path}")
-                self.add_text(f"Image stored here: {self.latest_image_path}")
+                self.add_text(f"Record: Image stored here: {self.latest_image_path}")
             except OSError:
                 print("An error occurred: Camera not reachable.")
-                self.add_text("An error occurred: Camera not reachable.")
+                self.add_text("Record: An error occurred: Camera not reachable.")
 
         self.gui_app.record_button["state"] = "normal"
 
     def show_spectogram(self):
         if self.latest_audio_path != "":
             print("Showing mel-spectogram of audio")
-            self.add_text("Showing mel-spectogram of audio")
-            # plot_spectogram(self.latest_audio_path)
-            plot_spectogram2(self.latest_audio_path)
+            self.add_text("Spectogram: Showing mel-spectogram of audio")
+            plot_spectogram(self.latest_audio_path)
+            # plot_spectogram2(self.latest_audio_path)
         else:
             print("Record audio first.")
-            self.add_text("Record audio first.")
+            self.add_text("Spectogram: Record audio first.")
 
     def discard_record(self):
         # todo: delete label too

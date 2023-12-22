@@ -5,7 +5,6 @@ from usb.util import get_string
 
 
 class AudioInterface:
-
     @staticmethod
     def find_device():
 
