@@ -13,8 +13,8 @@ from sources.user_interface.GUIAppController import GUIAppController
 
 def show_spectogram(recorded_audio_path):
     print("Show mel-spectogram of audio")
-    # plot_spectogram(recorded_audio_path)
-    # plot_spectogram2(recorded_audio_path)
+    plot_spectogram(recorded_audio_path)
+    plot_spectogram2(recorded_audio_path)
 
 
 def get_chord_capture_image(recorded_audio_path, camera):
@@ -37,13 +37,6 @@ def main():
         webcam.release()
         webcam = Camera()
 
-    # Open graphical user interface after init complete
-    root = tk.Tk()
-    app = GUIApp(root)
-    # Following line needed that GUIAppController can access GUIApp attributes
-    GUIAppController.gui_app = app
-    root.mainloop()
-
     # Record audio if audio interface was found
     if device is not None and index is not None:
         audio_stream = AudioStream(index)
@@ -53,7 +46,7 @@ def main():
     # Temporary hardcoded paths to recorded audio (testing)
     # recorded_audio_path = "data/records/record-20231207-212628.wav"
     # recorded_audio_path = "data/records/Major_0.wav"
-    recorded_audio_path = "data/records/record-20231207-212459.wav"
+    recorded_audio_path = "data/records/Super Sub 808 Bass_1.wav"
 
     # Show (mel-)spectogram of recorded audio
     show_spectogram(recorded_audio_path)
@@ -62,5 +55,17 @@ def main():
     get_chord_capture_image(recorded_audio_path, webcam)
 
 
+def test():
+    # Open graphical user interface after init complete
+    root = tk.Tk()
+    controller = GUIAppController(None)
+    app = GUIApp(root, controller)
+    # Following line needed that GUIAppController can access GUIApp attributes
+    GUIAppController.gui_app = app
+
+    root.mainloop()
+
+
 if __name__ == '__main__':
-    main()
+    # main()
+    test()

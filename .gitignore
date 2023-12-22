@@ -8,4 +8,6 @@ sources/audiostream_handler/__pycache__/
 sources/device_handler/__pycache__/
 sources/chord_detection/__pycache__/
 sources/user_interface/__pycache__/
-data/images/*
+data/images/
+data/records/
+resources/

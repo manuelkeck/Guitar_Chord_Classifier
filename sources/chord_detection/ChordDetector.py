@@ -1,5 +1,3 @@
-
-
 from sources.chord_detection.CNNHandler import CNN
 
 

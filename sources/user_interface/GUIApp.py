@@ -1,51 +1,63 @@
 import tkinter as tk
-import sys
 
-from tkinter import scrolledtext
-from tkinter import Text
-from sources.user_interface.GUIAppController import GUIAppController
+from tkinter import ttk
+from screeninfo import get_monitors
 
 
 class GUIApp:
-    def __init__(self, master):
-        self.master = master
-        master.title("Recording Tool")
+    def __init__(self, root, controller):
+        self.root = root
+        self.root.title("Recording Tool")
+        # root.resizable(False, False)
+        self.controller = controller
 
-        # Dynamic size based on screen size (50%)
-        #screen_width = master.winfo.screenwidth()
-        #screen_height = master.winfo.screenheight()
-        #window_width = int(screen_width * 0.5)
-        #window_height = int(screen_height * 0.5)
+        # Windows size and positioning (based on main screen)
+        window_width = 960
+        window_height = 540
+        screen = get_monitors()[0]
+        x = (screen.width - window_width) // 2
+        y = (screen.height - window_height) // 2
+        self.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
-        master.configure(bg='#E0E0E0')
+        style = ttk.Style()
 
-        # Output field
-        self.text_output = scrolledtext.ScrolledText(master, wrap=tk.WORD, width=40, height=10)
-        self.text_output.pack(pady=10)
+        style.configure("TFrame", background="black")
+        style.configure("TButton", padding=6, relief="flat", background="#d9d9d9")
 
-        # Terminal
-        self.terminal_output = Text(master, wrap=tk.WORD, width=40, height=5)
-        self.terminal_output.pack(pady=10)
+        # Left frame
+        self.left_frame = tk.Frame(root, width=480, height=500, bg="red")
+        self.left_frame.grid(row=0, column=0, sticky="nsew")
 
-        # Record Button
-        self.record_button = tk.Button(master, text="Record", command=self.start_recording)
-        self.record_button.pack(pady=5)
+        self.camera_frame = tk.Frame(self.left_frame, width=450, height=100, bg="black")
+        self.camera_frame.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
 
-        # Finish Button
-        self.finish_button = tk.Button(master, text="Finish", command=self.close_app)
-        self.finish_button.pack(pady=5)
+        self.camera_label = ttk.Label(self.left_frame, text="Camera Label")
+        self.camera_label.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
 
-        # Reference controller class
-        self.gui_app_controller = GUIAppController
+        # Right frame
+        self.right_frame = tk.Frame(root, width=480, height=500, bg="green")
+        self.right_frame.grid(row=0, column=1, sticky="nsew")
 
-        # Set window size
-        #master.geometry(
-        #    f"{window_width}x{window_height}+{int((screen_width - window_width) / 2)}"
-        #    f"+{int((screen_height - window_height) / 2)}"
-        #)
+        self.output_frame = ttk.Frame(self.right_frame, width=450, height=300, style="TFrame")
+        self.output_frame.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+
+        self.output_label = ttk.Label(self.right_frame, text="Output Label")
+        self.output_label.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
+
+        self.discard_button = ttk.Button(self.right_frame, text="Discard")
+        self.discard_button.grid(row=2, column=0, padx=5, pady=5, sticky="sw")
+
+        # Quit
+        self.quit_button = ttk.Button(self.root, text="Quit", command=root.destroy)
+        self.quit_button.grid(row=2, column=0, padx=5, pady=5, sticky="sw")
+
+        # Record
+        self.record_button = ttk.Button(self.root, text="Record", command=self.start_recording)
+        self.record_button.grid(row=2, column=1, padx=5, pady=5, sticky="se")
+
+        # self.root.grid_rowconfigure(0, weight=1)
+        # self.left_frame.grid_rowconfigure(0, weight=1)
+        # self.right_frame.grid_rowconfigure(0, weight=1)
 
     def start_recording(self):
-        self.gui_app_controller.start_recording(self.text_output)
-
-    def close_app(self):
-        self.gui_app_controller.quit_app(self.text_output, self.master)
+        self.controller.start_recording()

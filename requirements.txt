@@ -10,3 +10,4 @@ keras
 usb
 opencv-python
 tensorflow
+screeninfo
