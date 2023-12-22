@@ -27,45 +27,10 @@ def get_chord_capture_image(recorded_audio_path, camera):
 
 
 def main():
-    # Init audio interface and built-in webcam
-    device, index = AudioInterface.find_device()
-    webcam = Camera()
-
-    while not webcam.is_opened():
-        print("Waiting for webcam...")
-        cv2.waitKey(1000)
-        webcam.release()
-        webcam = Camera()
-
-    # Record audio if audio interface was found
-    if device is not None and index is not None:
-        audio_stream = AudioStream(index)
-        recorded_audio_path = audio_stream.record_audio()
-        print(f"Recorded audio stored here: {recorded_audio_path}")
-
-    # Temporary hardcoded paths to recorded audio (testing)
-    # recorded_audio_path = "data/records/record-20231207-212628.wav"
-    # recorded_audio_path = "data/records/Major_0.wav"
-    recorded_audio_path = "data/records/Super Sub 808 Bass_1.wav"
-
-    # Show (mel-)spectogram of recorded audio
-    show_spectogram(recorded_audio_path)
-
-    # Find chord (record = CNN input, chord = CNN output) and capture image
-    get_chord_capture_image(recorded_audio_path, webcam)
-
-
-def test():
-    # Open graphical user interface after init complete
     root = tk.Tk()
-    controller = GUIAppController(None)
-    app = GUIApp(root, controller)
-    # Following line needed that GUIAppController can access GUIApp attributes
-    GUIAppController.gui_app = app
-
+    GUIApp(root)
     root.mainloop()
 
 
 if __name__ == '__main__':
-    # main()
-    test()
+    main()

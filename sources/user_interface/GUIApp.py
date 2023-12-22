@@ -2,14 +2,15 @@ import tkinter as tk
 
 from tkinter import ttk
 from screeninfo import get_monitors
+from sources.user_interface.GUIAppController import GUIAppController
 
 
 class GUIApp:
-    def __init__(self, root, controller):
+    def __init__(self, root):
         self.root = root
         self.root.title("Recording Tool")
         # root.resizable(False, False)
-        self.controller = controller
+        # self.controller = controller
 
         # Windows size and positioning (based on main screen)
         window_width = 960
@@ -59,5 +60,7 @@ class GUIApp:
         # self.left_frame.grid_rowconfigure(0, weight=1)
         # self.right_frame.grid_rowconfigure(0, weight=1)
 
+        self.controller = GUIAppController(self)
+
     def start_recording(self):
-        self.controller.start_recording()
+        self.controller.start_chord_detection()
