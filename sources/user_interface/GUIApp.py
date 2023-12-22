@@ -35,15 +35,16 @@ class GUIApp:
         self.camera_placeholder.pack()
 
         # Right frame #######################################################
-        self.right_frame = tk.Frame(self.content, width=480, height=500, bg="green")
+        self.right_frame = tk.Frame(self.content, width=480, height=500)
         self.right_frame.pack(side="left", fill="both", expand=True)
 
-        self.textfield = tk.Text(self.right_frame, wrap="word", height=100, width=100)
-
-        self.output_frame = ttk.Frame(self.right_frame, width=450, height=300, style="TFrame")
+        self.output_frame = ttk.Frame(self.right_frame)
         self.output_frame.pack(padx=5, pady=5, fill="both", expand=True)
-        self.output_label = ttk.Label(self.right_frame, text="Output Label")
-        self.output_label.pack(padx=5, pady=5, anchor="n")
+        text_widget_width = int(self.right_frame.winfo_width() * 0.9)
+        text_widget_height = int(self.right_frame.winfo_height() * 0.5)
+        self.textfield = tk.Text(self.output_frame, wrap="word", height=10, width=50)
+        self.textfield.pack(padx=5, pady=5, fill="both", expand=True)
+
         self.specto_button = ttk.Button(self.right_frame, text="Spectogram", width=10, command=self.spectogram)
         self.specto_button.pack(padx=5, pady=5, anchor="sw")
         self.discard_button = ttk.Button(self.right_frame, text="Discard", width=10, command=self.discard)

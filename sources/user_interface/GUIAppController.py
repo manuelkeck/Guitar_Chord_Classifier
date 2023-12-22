@@ -26,6 +26,8 @@ class GUIAppController:
             audio_stream = AudioStream(index)
             self.latest_audio_path = audio_stream.record_audio()
             print(f"Recorded audio stored here: {self.latest_audio_path}")
+            self.add_text(f"Recorded audio stored here: {self.latest_audio_path}")
+
         else:
             self.latest_audio_path = "data/records/Major_0.wav"
 
@@ -34,27 +36,47 @@ class GUIAppController:
         chord = cd.classify_chord()
         if chord in CLASSES:
             print(f"Recorded chord is: {chord}. \nImage will be captured.")
+            self.add_text(f"Recorded chord is: {chord}. \nImage will be captured.")
             try:
                 self.latest_image_path = webcam.capture_image(self.latest_audio_path)
                 print(f"Image stored here: {self.latest_image_path}")
+                self.add_text(f"Image stored here: {self.latest_image_path}")
             except OSError:
                 print("An error occurred: Camera not reachable.")
+                self.add_text("An error occurred: Camera not reachable.")
 
         self.gui_app.record_button["state"] = "normal"
 
     def show_spectogram(self):
         if self.latest_audio_path != "":
             print("Showing mel-spectogram of audio")
+            self.add_text("Showing mel-spectogram of audio")
             # plot_spectogram(self.latest_audio_path)
             plot_spectogram2(self.latest_audio_path)
         else:
             print("Record audio first.")
+            self.add_text("Record audio first.")
 
     def discard_record(self):
+        # todo: delete label too
+
         if self.latest_audio_path == "" or self.latest_image_path == "":
             print("Recording audio needed to discard record.")
+            self.add_text("Discard: Recording audio needed to discard record.")
         else:
             print("Recorded audio and captured image will be deleted.")
+            self.add_text("Discard: Recorded audio and captured image will be deleted.")
+            tmp_audio = self.latest_audio_path
+            tmp_image = self.latest_image_path
+
             # todo: delete feature
+
             self.latest_audio_path = ""
             self.latest_audio_path = ""
+
+            self.add_text(f"Discard: {tmp_audio} deleted.")
+            self.add_text(f"Discard: {tmp_image} deleted.")
+
+    def add_text(self, text):
+        self.gui_app.textfield.insert("end", f"{text}\n")
+        self.gui_app.textfield.see("end")
