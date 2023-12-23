@@ -41,15 +41,15 @@ Sometimes the error message "tkinter not found" appears at the first start. To g
 for your Python version. If you are using Python v3.10 or v3.11 then the following commands can
 help you to get it worked:
 
-MacOS (tested):\
+#### MacOS (tested)
 Install for Python 3.x versions: `pip3 install tk`
 Install for specific version globally: `brew install python-tk@3.10`. This requires [Homebrew](https://brew.sh). Replace @3.10 with your version. 
 You can get your version by entering `python --version`in terminal.
 
-Ubuntu (tested):\
+#### Ubuntu (tested)
 Install tkinter for Python v3.x with this command: `sudo apt-get install python3-tk`
 
-Windows (not tested):\
+#### Windows (not tested)
 Try `pip install tk` for local installation or `python -m pip install tk` to install globally.
 Second option is installation with a virtual env framework like [anaconda](https://docs.anaconda.com/free/anaconda/install/windows/).
 
