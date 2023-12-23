@@ -5,7 +5,7 @@ To achieve this, an existing guitar chord detection is integrated.
 If a chord was detected successfully, an image will be created, labelled and stored.
 
 For chord detection, some parts of this project are integrated: https://github.com/ayushkumarshah/Guitar-Chords-recognition
-This project is licenced unter [BNU GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html).
+This project is licenced under [GNU GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
 After the collection of a meaningful sum of images is done (separated in training and validation datasets), an own Convolutional Neural Network (CNN) will be trained, based on the created dataset.
 
