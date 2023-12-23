@@ -41,4 +41,85 @@ Reutlingen University\
 2023
 
 ## License
-For open source projects, say how it is licensed.
+This project is an open-source project.
+The following libraries are/were used and are categorized by licence.
+The following information is not guaranteed to be complete and correct.
+
+[MIT License](https://opensource.org/licenses/MIT):
+pyaudio,
+sounddevice,
+pip,
+wheel,
+rsa,
+setuptools,
+gdown,
+lazycats,
+requests,
+wrapt,
+rich,
+pyasn1,
+termcolor,
+pycparser,
+pyparsing,
+oauthlib,
+MarkupSafe,
+idna,
+pyusb,
+screeninfo,
+cffi,
+filelock,
+platformdirs,
+wrapt,
+gdown,
+lazycats,
+pydub,
+noisereduce,
+pedalboard,
+fonttools
+
+[BSD License](https://opensource.org/licenses/BSD-3-Clause):
+numpy,
+scipy,
+Pillow,
+six,
+numba,
+packaging,
+scikit-learn,
+python-dateutil,
+Markdown,
+llvmlite,
+h5py,
+soundfile,
+cachetools,
+contourpy,
+cycler,
+kiwisolver,
+opencv-python,
+pooch,
+joblib,
+werkzeug,
+contourpy,
+decorator,
+torchvision
+
+[Apache License 2.0](https://opensource.org/licenses/Apache-2.0):
+tensorflow,
+tensorboard,
+astunparse,
+flatbuffers,
+urllib3,
+soupsieve,
+cython,
+msgpack,
+requests
+
+[LGPL (Lesser General Public License)](https://www.gnu.org/licenses/lgpl-3.0.html):
+usb,
+soxr
+
+[ISC License](https://opensource.org/licenses/ISC):
+librosa
+
+[Matplotlib License](https://matplotlib.org/stable/users/license.html):
+matplotlib,
+cycler
