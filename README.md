@@ -44,7 +44,7 @@ help you to get it worked:
 #### MacOS (tested)
 Install for Python 3.x versions: `pip3 install tk`
 Install for specific version globally: `brew install python-tk@3.10`. This requires [Homebrew](https://brew.sh). Replace @3.10 with your version. 
-You can get your version by entering `python --version`in terminal.
+You can get your version by entering `python --version` in terminal.
 
 #### Ubuntu (tested)
 Install tkinter for Python v3.x with this command: `sudo apt-get install python3-tk`
