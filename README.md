@@ -15,9 +15,11 @@ Clone repository with `git clone https://gitlab.reutlingen-university.de/keckm/g
 
 ### Preconditions
 1. Connect an audio interface (e.g. Steinberg UR22C)
-2. Get interface ...
-3. Get camera ID ...
-4. 
+2. Get idVendor and idProduct from audio interface by entering `lsusb` in macOS/ubuntu terminal
+3. -> enter in settings 
+4. Camera index: macOS (camera_index=1), ubuntu (camera_index=-1)
+5. -> enter in settings
+6. 
 
 ### Install libraries
 To get all needed libraries, open a new terminal and execute `pip install -r requirements.txt` in cloned folder `Guitar_Chord_Detector`. 
