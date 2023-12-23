@@ -8,13 +8,12 @@ def init_model():
 
 
 class ChordDetector:
-    def __init__(self, path):
-        self.file_path = path
+    def __init__(self):
+        self.cnn = init_model()
 
-    def classify_chord(self):
-        cnn = init_model()
-        chord = cnn.predict(self.file_path, False)
+    def classify_chord(self, file_path):
+        chord = self.cnn.predict(file_path, False)
 
-        # handle exceptions or chord not found
+        # todo: handle exceptions or chord not found
 
         return chord
