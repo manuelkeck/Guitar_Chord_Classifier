@@ -1,6 +1,6 @@
 """
 This code is based on https://github.com/ayushkumarshah/Guitar-Chords-recognition
-with some modifications.
+with some modifications and extensions.
 """
 
 import os

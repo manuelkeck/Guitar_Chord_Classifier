@@ -16,6 +16,12 @@ class AudioStream:
         self.record_filename = ""
 
     def record_audio(self, sample_rate=44100, duration=5):
+        """
+        This function records an audio stream from usb audio interface and stores it to local file system.
+        :param sample_rate: Sample rate of audio signal
+        :param duration: Duration of audio record
+        :return: Path to stored audio record file
+        """
         p = pyaudio.PyAudio()
 
         try:
@@ -39,8 +45,7 @@ class AudioStream:
             # Convert frames to a numpy array
             self.recorded_data = np.concatenate(frames, axis=0)
 
-            # Preprocessing
-
+            # todo: Preprocessing
 
             # Save recorded data as .wav file
             timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
