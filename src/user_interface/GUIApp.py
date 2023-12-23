@@ -3,8 +3,8 @@ import cv2
 
 from tkinter import ttk
 from screeninfo import get_monitors
-from sources.user_interface.GUIAppController import GUIAppController
-from sources.device_handler.Camera import Camera
+from src.user_interface.GUIAppController import GUIAppController
+from src.device_handler.Camera import Camera
 from PIL import Image, ImageTk
 
 

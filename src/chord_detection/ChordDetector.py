@@ -1,4 +1,4 @@
-from sources.chord_detection.CNNHandler import CNN
+from src.chord_detection.CNNHandler import CNN
 
 
 def init_model():

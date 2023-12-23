@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from sources.user_interface.GUIApp import GUIApp
+from src.user_interface.GUIApp import GUIApp
 
 
 def main():

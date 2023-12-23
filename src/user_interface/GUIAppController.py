@@ -1,9 +1,9 @@
-from sources.device_handler.AudioInterface import AudioInterface
-from sources.device_handler.Camera import Camera
-from sources.audiostream_handler.AudioStream import AudioStream
-from sources.chord_detection.ChordDetector import ChordDetector
-from sources.Settings import CLASSES
-from sources.TestVisualization import plot_spectogram, plot_spectogram2
+from src.device_handler.AudioInterface import AudioInterface
+from src.device_handler.Camera import Camera
+from src.audiostream_handler.AudioStream import AudioStream
+from src.chord_detection.ChordDetector import ChordDetector
+from src.Settings import CLASSES
+from src.TestVisualization import plot_spectogram, plot_spectogram2
 
 
 class GUIAppController:
