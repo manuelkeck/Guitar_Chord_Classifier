@@ -35,7 +35,14 @@ class GUIAppController:
             self.add_text(f"[Record] Recorded audio stored here: {self.latest_audio_path}")
 
         else:
-            self.latest_audio_path = "data/records/Major_0.wav"
+            # C-Dur (Downloaded from kaggle)
+            # self.latest_audio_path = "data/records/Major_0.wav"
+            # Self-recorded C-Dur
+            self.latest_audio_path = "data/records/record-20231223-141242.wav"
+            # Self-recorded D-Dur
+            # self.latest_audio_path = "data/records/record-20231223-141414.wav"
+            # Self-recorded G-Dur
+            # self.latest_audio_path = "data/records/record-20231223-141521.wav"
 
         # Find chord (record = CNN input, chord = CNN output) and capture image
         chord = self.cd.classify_chord(self.latest_audio_path)

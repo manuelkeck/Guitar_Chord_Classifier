@@ -4,11 +4,24 @@ The main objective of this project is to create an own dataset with images from 
 To achieve this, an existing guitar chord detection is integrated.
 If a chord was detected successfully, an image will be created, labelled and stored.
 
-For chord detection, some parts of this project are integrated: https://github.com/ayushkumarshah/Guitar-Chords-recognition
+For chord detection, some parts of this project are integrated: 
+https://github.com/ayushkumarshah/Guitar-Chords-recognition
 This project is licenced under [GNU GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
-After the collection of a meaningful sum of images is done (separated in training and validation datasets), an own Convolutional Neural Network (CNN) will be trained, based on the created dataset.
+After the collection of a meaningful sum of images is done (separated in training and validation datasets), 
+an own Convolutional Neural Network (CNN) will be trained, based on the created dataset.
 
+In the current version of this project the following chords can be predicted by CNN:
+- A
+- Am
+- Bm
+- C
+- D
+- Dm
+- E
+- Em
+- F
+- G
 
 ## Getting started
 Clone repository with `git clone https://gitlab.reutlingen-university.de/keckm/guitar_chord_detector.git`.
@@ -22,13 +35,16 @@ Clone repository with `git clone https://gitlab.reutlingen-university.de/keckm/g
 6. 
 
 ### Install libraries
-To get all needed libraries, open a new terminal and execute `pip install -r requirements.txt` in cloned folder `Guitar_Chord_Detector`. 
+To get all needed libraries, open a new terminal and execute `pip install -r requirements.txt` in cloned 
+folder `Guitar_Chord_Detector`. 
 It is recommended to do this in a virtual environment which can be created with 
 e.g. venv (https://docs.python.org/3/library/venv.html).
 
 ### Part 1: Create dataset(s) with chord images
 To reproduce this part, change branch to `create_dataset` with command `git checkout create_dataset`.
-After changing branch successfully, start with `python main.py`. A Graphical User Interface (GUI) will be opened.\
+After changing branch successfully, start with `python main.py`. A Graphical User Interface (GUI) will 
+be opened.
+
 The GUI will look like this:
 ![Image](resources/Screenshot_part1.png)
 In this screenshot you can see the camera preview to predict the image that will be captured 
@@ -45,7 +61,8 @@ help you to get it worked:
 
 ###### MacOS (tested)
 Install for Python 3.x versions: `pip3 install tk`
-Install for specific version globally: `brew install python-tk@3.10`. This requires [Homebrew](https://brew.sh). Replace @3.10 with your version. 
+Install for specific version globally: `brew install python-tk@3.10`. This requires [Homebrew](https://brew.sh). 
+Replace @3.10 with your version. 
 You can get your version by entering `python --version` in terminal.
 
 ###### Ubuntu (tested)
@@ -55,14 +72,41 @@ Install tkinter for Python v3.x with this command: `sudo apt-get install python3
 Try `pip install tk` for local installation or `python -m pip install tk` to install globally.
 Second option is installation with a virtual env framework like [anaconda](https://docs.anaconda.com/free/anaconda/install/windows/).
 
+## Further development
+### Extend amount of chords
+In the current version of this project there are only 10 chords that can be predicted by CNN.
+
+The project from ayushkumarshah, which is used in this project 
+(https://github.com/ayushkumarshah/Guitar-Chords-recognition) offers an explanation how to extend 
+and re-train the model.
+
+### Audio preprocessing
+To increase the accuracy of prediction, a preprocessing algorithm for recorded audio can be helpful.
+This is not implemented in the current version of this project. To achieve a mostly clean audio file, the
+gain option of the audio interface is adjusted to avoid noised and get a sufficient recognition of the 
+played chord.
+
+### Improve CNN model
+It is unknown, if the used, trained model for chord-audio-recognition is "good". In further developments
+a new model could be trained, based on given datasets from [Kaggle](https://www.kaggle.com). 
+There are several datasets like...
+- https://www.kaggle.com/code/mpwolke/guitar-chords-wav/notebook
+- https://www.kaggle.com/datasets/fabianavinci/guitar-chords-v3
+
+... and more.
+
 ## Authors and acknowledgment
 Manuel Keck\
 Human-Centered Computing (INF)\
 Reutlingen University\
 2023
 
+This project is a product of HUC2.5 Bildverarbeitung from Human-Centered Computing (INF) at Reutlingen 
+University.
+
 ## License
 This project is an open-source project.
+
 The following libraries are/were used and are categorized by licence.
 The following information is not guaranteed to be complete and correct.
 
