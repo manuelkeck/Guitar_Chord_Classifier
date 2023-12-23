@@ -17,7 +17,7 @@ class GUIAppController:
 
         # Init audio interface and built-in webcam
         device, index = AudioInterface.find_device()
-        webcam = Camera()
+        #webcam = Camera()
 
         # Record audio if audio interface was found
         if device is not None and index is not None:
@@ -37,7 +37,7 @@ class GUIAppController:
             print(f"Recorded chord is: {chord}. \nImage will be captured.")
             self.add_text(f"Record: Recorded chord is: {chord}. \nImage will be captured.")
             try:
-                self.latest_image_path = webcam.capture_image(self.latest_audio_path)
+                self.latest_image_path = self.gui_app.camera.capture_image(self.latest_audio_path)
                 print(f"Image stored here: {self.latest_image_path}")
                 self.add_text(f"Record: Image stored here: {self.latest_image_path}")
             except OSError:
