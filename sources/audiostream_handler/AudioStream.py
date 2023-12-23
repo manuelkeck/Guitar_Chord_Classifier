@@ -19,11 +19,13 @@ class AudioStream:
         p = pyaudio.PyAudio()
 
         try:
-            self.stream = p.open(format=pyaudio.paInt16,
-                                 channels=1,
-                                 rate=sample_rate,
-                                 input=True,
-                                 input_device_index=self.device_index)
+            self.stream = p.open(
+                format=pyaudio.paInt16,
+                channels=1,
+                rate=sample_rate,
+                input=True,
+                input_device_index=self.device_index
+            )
 
             print(f"Recording started for {duration} seconds...")
             frames = []
@@ -36,6 +38,9 @@ class AudioStream:
 
             # Convert frames to a numpy array
             self.recorded_data = np.concatenate(frames, axis=0)
+
+            # Preprocessing
+
 
             # Save recorded data as .wav file
             timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")

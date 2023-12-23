@@ -21,6 +21,7 @@ class GUIAppController:
 
         # Record audio if audio interface was found
         if device is not None and index is not None:
+            # todo: 5 seconds point loading index
             audio_stream = AudioStream(index)
             self.latest_audio_path = audio_stream.record_audio()
             print(f"Recorded audio stored here: {self.latest_audio_path}")
