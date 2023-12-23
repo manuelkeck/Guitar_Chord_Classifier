@@ -4,37 +4,41 @@ The main objective of this project is to create an own dataset with images from 
 To achieve this, an existing guitar chord detection is integrated.
 If a chord was detected successfully, an image will be created, labelled and stored.
 
-For chord detection parts of this project were integrated: https://github.com/ayushkumarshah/Guitar-Chords-recognition
+For chord detection, some parts of this project are integrated: https://github.com/ayushkumarshah/Guitar-Chords-recognition
 
-After collection of a meaningful sum of images (separated in training and validation datasets), an own Convolutional Neural Network (CNN) will be trained, based on the created dataset.
+After the collection of a meaningful sum of images is done (separated in training and validation datasets), an own Convolutional Neural Network (CNN) will be trained, based on the created dataset.
 
 
 ## Getting started
+Clone repository with `git clone https://gitlab.reutlingen-university.de/keckm/guitar_chord_detector.git`.
+
+### Preconditions
+1. Connect an audio interface (e.g. Steinberg UR22C)
+2. Get interface ...
+3. Get camera ID ...
+4. 
 
 ### Install libraries
-To get all needed libraries, create a virtual environment and execute `pip install -r requirements.txt`.
+To get all needed libraries, open a new terminal and execute `pip install -r requirements.txt` in cloned folder `Guitar_Chord_Detector`. 
+It is recommended to do this in a virtual environment which can be created with 
+e.g. venv (https://docs.python.org/3/library/venv.html).
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### Part 1: Create dataset(s) with chord images
+To reproduce this part, change branch to `create_dataset` with command `git checkout create_dataset`.
+After changing branch successfully, start with `python main.py`. A Graphical User Interface (GUI) will be opened.\
+The GUI will look like this:
+![Image](resources/Screenshot_part1.png)
+In this screenshot you can see the camera preview to predict the image that will be captured 
+if a chord could be detected. On right side you can see some statements like 'Recorded chord is: c'.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+### Part 2: Create CNN based on captured images
+tbd
 
 ## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Manuel Keck\
+Human-Centered Computing (INF)\
+Reutlingen University\
+2023
 
 ## License
 For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
