@@ -20,18 +20,18 @@ WAVE_OUTPUT_FILE = os.path.join(RECORDING_DIR, "recorded.wav")
 SPECTROGRAM_FILE = os.path.join(RECORDING_DIR, "spectrogram.png")
 
 # Features
-CLASSES = ['a', 'am', 'bm', 'c', 'd', 'dm', 'e', 'em', 'f', 'g']
+CLASSES = ['A', 'Am', 'Bm', 'C', 'D', 'Dm', 'E', 'Em', 'F', 'G']
 CLASSES_MAP = {
-    'a': 0,
-    'am': 1,
-    'bm': 2,
-    'c': 3,
-    'd': 4,
-    'dm': 5,
-    'e': 6,
-    'em': 7,
-    'f': 8,
-    'g': 9
+    'A': 0,
+    'Am': 1,
+    'Bm': 2,
+    'C': 3,
+    'D': 4,
+    'Dm': 5,
+    'E': 6,
+    'Em': 7,
+    'F': 8,
+    'G': 9
 }
 
 # Audio configurations
