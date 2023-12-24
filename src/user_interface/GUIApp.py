@@ -31,12 +31,12 @@ class GUIApp:
         self.content = tk.Frame(self.root)
 
         # Left frame #######################################################
-        self.left_frame = tk.Frame(self.content, width=480, height=500)
+        self.left_frame = tk.Frame(self.content, width=400, height=300)
         self.left_frame.pack(side="left", fill="both", expand=True)
 
         self.camera_label = ttk.Label(self.left_frame, text="Camera Preview")
         self.camera_label.pack(padx=5, pady=10, anchor="n")
-        self.video_label = tk.Label(self.left_frame, width=480, height=270)
+        self.video_label = tk.Label(self.left_frame, width=352, height=198)
         self.video_label.pack(pady=2)
         self.update_camera()
 
