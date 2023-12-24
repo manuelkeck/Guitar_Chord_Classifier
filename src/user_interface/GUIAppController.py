@@ -37,12 +37,12 @@ class GUIAppController:
             # Record audio
             audio_stream = AudioStream(self.index)
             self.latest_audio_path, name = audio_stream.record_audio()
-            self.gui_app.progressbar.stop()
 
             print(f"Recorded audio stored here: {self.latest_audio_path}")
             self.add_text(f"[Record] Recorded audio stored here: ../data/records/{name}")
 
         else:
+            print("Audio interface not found. Fallback to pre-defined audio path.")
             self.add_text("[Record] Audio interface not found. Fallback to pre-defined audio path.")
             # C-Dur (Downloaded from kaggle)
             # self.latest_audio_path = "data/records/Major_0.wav"
@@ -53,16 +53,14 @@ class GUIAppController:
             # Self-recorded G-Dur
             # self.latest_audio_path = "data/records/record-20231223-141521.wav"
 
-
-    def record_audio_test(self):
-        print("Record audio started")
-        time.sleep(5)
+        print("Record audio function finished successfully")
 
     def perform_chord_detection(self):
         """
 
         :return:
         """
+        print("Chord detection function called")
         # Find chord (record = CNN input, chord = CNN output) and capture image
         chord = self.cd.classify_chord(self.latest_audio_path)
         if chord in CLASSES:

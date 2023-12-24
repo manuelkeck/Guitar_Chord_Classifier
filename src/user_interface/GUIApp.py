@@ -16,8 +16,9 @@ class GUIApp(tk.Tk):
         super().__init__()
         self.title("Recording Tool")
         self.recording_thread = None
+        self.recording_thread_running = False
+        self.recording_thread_stop = False
         self.camera = Camera()
-        self.recording_duration = 5
 
         # Windows size and positioning (based on main screen)
         window_width = 960
@@ -88,15 +89,32 @@ class GUIApp(tk.Tk):
         self.controller = GUIAppController(self)
 
     def start_recording(self):
-        self.recording_thread = threading.Thread(target=self.controller.record_audio_test)
+        def on_thread_complete():
+            print("Callback from thread.")
+            # self.stop_thread()
+            # self.controller.perform_chord_detection()
+
+        if self.recording_thread is not None and self.recording_thread.is_alive():
+            print("Thread is already running.")
+            return
+
+        self.recording_thread_running = True
+        self.recording_thread = threading.Thread(target=lambda: self.task(on_thread_complete))
         self.recording_thread.start()
-        self.update_progressbar()
-        # self.controller.start_chord_detection()
+
+    def task(self, callback):
+        self.controller.record_audio()
+        print("Callback will now be called")
+        callback()
+        while self.recording_thread.is_alive():
+            print("Recording thread still alive...")
+            time.sleep(1)
+        self.controller.perform_chord_detection()
 
     def update_progressbar(self):
-        for i in range(self.recording_duration * 10):  # 10 Updates pro Sekunde
+        for i in range(DURATION * 10):  # 10 Updates pro Sekunde
             time.sleep(0.1)
-            self.progressbar["value"] = (i + 1) / (self.recording_duration * 10) * 100
+            self.progressbar["value"] = (i + 1) / (DURATION * 10) * 100
             self.update_idletasks()
 
         self.recording_thread.join()
