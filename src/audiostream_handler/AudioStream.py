@@ -4,22 +4,20 @@ import wavio
 import matplotlib.pyplot as plt
 
 from datetime import datetime
+from Settings import RECORDING_DIR, SAMPLE_RATE, DURATION, CHUNK_SIZE, MAX_INPUT_CHANNELS
 
 
 class AudioStream:
-    def __init__(self, device_index, sample_rate=44100, duration=5):
+    def __init__(self, device_index):
         self.device_index = device_index
-        self.sample_rate = sample_rate
-        self.duration = duration
         self.recorded_data = b''
         self.stream = ''
         self.record_filename = ""
 
-    def record_audio(self, sample_rate=44100, duration=5):
+    def record_audio(self):
         """
-        This function records an audio stream from usb audio interface and stores it to local file system.
-        :param sample_rate: Sample rate of audio signal
-        :param duration: Duration of audio record
+        This function records an audio stream from usb audio interface and stores
+        it to local file system.
         :return: Path to stored audio record file
         """
         p = pyaudio.PyAudio()
@@ -27,17 +25,17 @@ class AudioStream:
         try:
             self.stream = p.open(
                 format=pyaudio.paInt16,
-                channels=1,
-                rate=sample_rate,
+                channels=MAX_INPUT_CHANNELS,
+                rate=SAMPLE_RATE,
                 input=True,
                 input_device_index=self.device_index
             )
 
-            print(f"Recording started for {duration} seconds...")
+            print(f"Recording started for {DURATION} seconds...")
             frames = []
 
-            for _ in range(int(sample_rate / 1024 * duration)):
-                data = self.stream.read(1024)
+            for _ in range(int(SAMPLE_RATE / CHUNK_SIZE * DURATION)):
+                data = self.stream.read(CHUNK_SIZE)
                 frames.append(np.frombuffer(data, dtype=np.int16))
 
             print("Recording finished.")
@@ -45,12 +43,13 @@ class AudioStream:
             # Convert frames to a numpy array
             self.recorded_data = np.concatenate(frames, axis=0)
 
-            # todo: Preprocessing
+            # Preprocessing
 
             # Save recorded data as .wav file
             timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-            self.record_filename = f'data/records/record-{timestamp}.wav'
-            wavio.write(self.record_filename, self.recorded_data.astype(np.int16), sample_rate)
+            file_name = f"record-{timestamp}.wav"
+            self.record_filename = f'{RECORDING_DIR}{file_name}'
+            wavio.write(self.record_filename, self.recorded_data.astype(np.int16), SAMPLE_RATE)
 
             print(f"Recording saved as {self.record_filename}")
             self.visualize_audio(self.recorded_data, self.record_filename)
@@ -60,7 +59,7 @@ class AudioStream:
             self.stream.close()
             p.terminate()
 
-        return self.record_filename
+        return self.record_filename, file_name
 
     def visualize_audio(self, audio_data, title):
         """

@@ -8,7 +8,7 @@ import numpy as np
 
 from keras.models import Sequential
 from keras.models import model_from_json
-from src.Settings import CLASSES_MAP, CLASSES, MODEL_DIR
+from Settings import CLASSES_MAP, CLASSES, MODEL_DIR
 from src.chord_detection.CNNMetrics import *
 
 

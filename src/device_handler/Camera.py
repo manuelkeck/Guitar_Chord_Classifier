@@ -1,6 +1,8 @@
 import cv2
 import os
 
+from Settings import IMAGE_DIR
+
 
 class Camera:
     """
@@ -61,11 +63,10 @@ class Camera:
 
         # Get name from recorded audio and remove .wav extension to store image with same name
         image_name, extension = os.path.splitext(os.path.basename(recorded_audio_path))
-        image_directory = "data/images/"
         file_extension = ".jpg"
 
         # Save the single captured frame as an image
-        image_path = os.path.join(image_directory, f"{image_name}{file_extension}")
+        image_path = os.path.join(IMAGE_DIR, f"{image_name}{file_extension}")
         cv2.imwrite(image_path, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), [int(cv2.IMWRITE_JPEG_QUALITY), 100])
 
-        return image_path
+        return image_path, image_name

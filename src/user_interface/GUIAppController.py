@@ -1,8 +1,10 @@
+import os
+
 from src.device_handler.AudioInterface import AudioInterface
 from src.audiostream_handler.AudioStream import AudioStream
 from src.chord_detection.ChordDetector import ChordDetector
-from src.Settings import CLASSES
-from src.TestVisualization import plot_spectogram, plot_spectogram2
+from Settings import CLASSES
+from src.TestVisualization import plot_spectogram
 
 
 class GUIAppController:
@@ -28,11 +30,10 @@ class GUIAppController:
 
         # Record audio if audio interface was found
         if self.device is not None and self.index is not None:
-            # todo: 5 seconds point loading index
             audio_stream = AudioStream(self.index)
-            self.latest_audio_path = audio_stream.record_audio()
+            self.latest_audio_path, name = audio_stream.record_audio()
             print(f"Recorded audio stored here: {self.latest_audio_path}")
-            self.add_text(f"[Record] Recorded audio stored here: {self.latest_audio_path}")
+            self.add_text(f"[Record] Recorded audio stored here: ../data/records/{name}")
 
         else:
             # C-Dur (Downloaded from kaggle)
@@ -50,9 +51,9 @@ class GUIAppController:
             print(f"Recorded chord is: {chord}. \nImage will be captured.")
             self.add_text(f"[Record] Recorded chord is: {chord}. \n[Record] Image will be captured.")
             try:
-                self.latest_image_path = self.gui_app.camera.capture_image(self.latest_audio_path)
+                self.latest_image_path, name = self.gui_app.camera.capture_image(self.latest_audio_path)
                 print(f"Image stored here: {self.latest_image_path}")
-                self.add_text(f"[Record] Image stored here: {self.latest_image_path}")
+                self.add_text(f"[Record] Image stored here: ../data/images/{name}.jpg")
             except OSError:
                 print("An error occurred: Camera not reachable.")
                 self.add_text("[Record] An error occurred: Camera not reachable.")
@@ -82,21 +83,33 @@ class GUIAppController:
         """
         if self.latest_audio_path == "" or self.latest_image_path == "":
             print("Recording audio needed to discard record.")
-            self.add_text("[Discard] Recording audio needed to discard record.")
+            self.add_text("[Discard] Record audio first to discard record.")
         else:
             print("Recorded audio and captured image will be deleted.")
-            self.add_text("[Discard] Recorded audio and captured image will be deleted.")
             tmp_audio = self.latest_audio_path
             tmp_image = self.latest_image_path
 
-            # todo: delete feature
+            # discard files
+            try:
+                # os.remove(self.latest_audio_path)
+                os.remove(self.latest_image_path)
+                print("Files were deleted.")
+                audio_name = os.path.basename(tmp_audio)
+                image_name = os.path.basename(tmp_image)
+                self.add_text("[Discard] The following files will be discarded:")
+                self.add_text(f"[Discard] {audio_name}")
+                self.add_text(f"[Discard] {image_name}")
+            except FileNotFoundError:
+                print("Files to delete not found.")
+                self.add_text("[Discard] Files not found.")
+            except Exception as e:
+                print("Error while deleting files.")
+                self.add_text("[Discard] Error while deleting files.")
+
             # todo: delete label too
 
             self.latest_audio_path = ""
             self.latest_audio_path = ""
-
-            self.add_text(f"[Discard] {tmp_audio} deleted.")
-            self.add_text(f"[Discard] {tmp_image} deleted.")
 
     def add_text(self, text):
         """
@@ -106,3 +119,4 @@ class GUIAppController:
         """
         self.gui_app.textfield.insert("end", f"{text}\n")
         self.gui_app.textfield.see("end")
+        self.gui_app.root.update()

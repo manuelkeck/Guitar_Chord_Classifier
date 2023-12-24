@@ -11,3 +11,4 @@ src/user_interface/__pycache__/
 data/images/
 data/records/
 resources/
+__pycache__/
