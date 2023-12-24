@@ -87,9 +87,9 @@ gain option of the audio interface is adjusted to avoid noised and get a suffici
 played chord.
 
 ### Improve CNN model
-It is unknown, if the used, trained model for chord-audio-recognition is "good". In further developments
-a new model could be trained, based on given datasets from [Kaggle](https://www.kaggle.com). 
-There are several datasets like...
+It is unknown, if the used, trained model for chord-audio-recognition is "good" but it was sufficient for this 
+project. In further developments a new model could be trained, based on given datasets from 
+[Kaggle](https://www.kaggle.com). There are several datasets like...
 - https://www.kaggle.com/code/mpwolke/guitar-chords-wav/notebook
 - https://www.kaggle.com/datasets/fabianavinci/guitar-chords-v3
 
