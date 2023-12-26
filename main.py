@@ -1,5 +1,6 @@
-import tkinter as tk
-
+"""
+Author: Manuel Keck
+"""
 from src.user_interface.GUIApp import GUIApp
 
 

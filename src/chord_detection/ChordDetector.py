@@ -1,3 +1,6 @@
+"""
+Author: Manuel Keck
+"""
 from src.chord_detection.CNNHandler import CNN
 
 

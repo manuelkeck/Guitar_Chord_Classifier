@@ -1,3 +1,6 @@
+"""
+Author: Manuel Keck
+"""
 import pyaudio
 import numpy as np
 import wavio

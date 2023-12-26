@@ -1,5 +1,7 @@
+"""
+Author: Manuel Keck
+"""
 import os
-import threading
 import time
 
 from src.device_handler.AudioInterface import AudioInterface
@@ -7,7 +9,6 @@ from src.audiostream_handler.AudioStream import AudioStream
 from src.chord_detection.ChordDetector import ChordDetector
 from Settings import CLASSES, DURATION
 from src.TestVisualization import plot_spectogram
-from datetime import datetime
 
 
 class GUIAppController:
@@ -43,7 +44,7 @@ class GUIAppController:
         else:
             print("Audio interface not found. Fallback to pre-defined audio path.")
             self.add_text("[Record] Audio interface not found. Fallback to pre-defined audio path.")
-            self.add_text("[Record] Simulating audio recording ...")
+            self.add_text(f"[Record] Simulating audio recording for {DURATION} seconds.")
             # C-Dur (Downloaded from kaggle)
             # self.latest_audio_path = "data/records/Major_0.wav"
             # Self-recorded C-Dur
@@ -53,6 +54,7 @@ class GUIAppController:
             # Self-recorded G-Dur
             # self.latest_audio_path = "data/records/record-20231223-141521.wav"
             time.sleep(DURATION)
+            self.add_text("[Record] Chord will be classified now...")
 
     def perform_chord_detection(self):
         """

@@ -1,3 +1,6 @@
+"""
+Author: Manuel Keck
+"""
 import usb.core
 import sounddevice as sd
 

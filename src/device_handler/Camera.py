@@ -1,3 +1,6 @@
+"""
+Author: Manuel Keck
+"""
 import cv2
 import os
 

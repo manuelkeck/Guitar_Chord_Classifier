@@ -37,7 +37,7 @@ CLASSES_MAP = {
 # Audio configurations
 MAX_INPUT_CHANNELS = 1
 SAMPLE_RATE = 44100
-DURATION = 5
+DURATION = 3
 CHUNK_SIZE = 1024
 
 # Camera configuration

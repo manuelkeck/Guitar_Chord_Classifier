@@ -1,3 +1,6 @@
+"""
+Author: Manuel Keck
+"""
 import tkinter as tk
 import cv2
 import time
@@ -16,6 +19,7 @@ class GUIApp(tk.Tk):
         super().__init__()
         self.title("Recording Tool")
         self.camera = Camera()
+        self.controller = GUIAppController(self)
 
         # Windows size and positioning (based on main screen)
         window_height = 540
@@ -26,12 +30,14 @@ class GUIApp(tk.Tk):
         self.geometry(f"{window_width}x{window_height}+{x}+{y}")
         self.minsize(750, 390)
 
-        style = ttk.Style()
+        # style = ttk.Style()
 
-        style.configure("TFrame", background="yellow")
-        style.configure("TButton", padding=6, relief="flat", background="#d9d9d9")
+        # style.configure("TFrame", background="yellow")
+        # style.configure("TButton", padding=6, relief="flat", background="#d9d9d9")
 
+        # Main frame #######################################################
         self.content = tk.Frame(self)
+        self.content.pack(fill="both", expand=True)
 
         # Left frame #######################################################
         self.left_frame = tk.Frame(self.content, width=400, height=300)
@@ -82,10 +88,6 @@ class GUIApp(tk.Tk):
 
         self.bottom_frame.pack_propagate(False)
         self.bottom_frame.pack_propagate(True)
-
-        self.content.pack(fill="both", expand=True)
-
-        self.controller = GUIAppController(self)
 
     def start_recording(self):
         _thread.start_new_thread(self.progress_bar, ())
