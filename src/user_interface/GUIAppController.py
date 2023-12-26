@@ -15,7 +15,6 @@ class GUIAppController:
     This class contains all needed functions which are implemented directly with GUI.
     If interactions with GUI will be performed, these functions contain the logic behind.
     """
-
     def __init__(self, gui_app):
         self.gui_app = gui_app
         self.latest_audio_path = ""
@@ -44,6 +43,7 @@ class GUIAppController:
         else:
             print("Audio interface not found. Fallback to pre-defined audio path.")
             self.add_text("[Record] Audio interface not found. Fallback to pre-defined audio path.")
+            self.add_text("[Record] Simulating audio recording ...")
             # C-Dur (Downloaded from kaggle)
             # self.latest_audio_path = "data/records/Major_0.wav"
             # Self-recorded C-Dur
@@ -52,8 +52,7 @@ class GUIAppController:
             # self.latest_audio_path = "data/records/record-20231223-141414.wav"
             # Self-recorded G-Dur
             # self.latest_audio_path = "data/records/record-20231223-141521.wav"
-
-        print("Record audio function finished successfully")
+            time.sleep(DURATION)
 
     def perform_chord_detection(self):
         """

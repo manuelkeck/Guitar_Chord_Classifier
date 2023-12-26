@@ -52,7 +52,7 @@ class AudioStream:
             wavio.write(self.record_filename, self.recorded_data.astype(np.int16), SAMPLE_RATE)
 
             print(f"Recording saved as {self.record_filename}")
-            # self.visualize_audio(self.recorded_data, self.record_filename)
+            self.visualize_audio(self.recorded_data, self.record_filename)
 
         finally:
             self.stream.stop_stream()
