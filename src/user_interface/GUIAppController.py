@@ -75,8 +75,6 @@ class GUIAppController:
                 print("An error occurred: Camera not reachable.")
                 self.add_text("[Record] An error occurred: Camera not reachable.")
 
-        self.gui_app.record_button["state"] = "normal"
-
     def show_spectogram(self):
         """
         This function calls one (or two) function to show a mel-spectogram of recorded

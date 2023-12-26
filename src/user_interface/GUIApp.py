@@ -90,6 +90,7 @@ class GUIApp(tk.Tk):
         self.bottom_frame.pack_propagate(True)
 
     def start_recording(self):
+        self.record_button["state"] = "disable"
         _thread.start_new_thread(self.progress_bar, ())
         _thread.start_new_thread(self.record_audio, ())
 
@@ -101,6 +102,7 @@ class GUIApp(tk.Tk):
             self.update_idletasks()
         print("Both tasks completed, chord detection will be called.")
         self.controller.perform_chord_detection()
+        self.record_button["state"] = "normal"
 
     def record_audio(self):
         print("Task 2: Audio Recording")
