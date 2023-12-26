@@ -1,10 +1,13 @@
 import os
+import threading
+import time
 
 from src.device_handler.AudioInterface import AudioInterface
 from src.audiostream_handler.AudioStream import AudioStream
 from src.chord_detection.ChordDetector import ChordDetector
-from Settings import CLASSES
+from Settings import CLASSES, DURATION
 from src.TestVisualization import plot_spectogram
+from datetime import datetime
 
 
 class GUIAppController:
@@ -16,26 +19,31 @@ class GUIAppController:
         self.gui_app = gui_app
         self.latest_audio_path = ""
         self.latest_image_path = ""
+        self.start_time = None
+        self.recording_thread = None
         self.device, self.index = AudioInterface.find_device()
         self.cd = ChordDetector()
 
-    def start_chord_detection(self):
+    def record_audio(self):
         """
         This function starts the recording process, if audio interface could be found.
         Recorded audio is going to be the input for CNN and outputs the identified chord.
         :return: None; If chord could be identified, an image will be captured and stored
-        to local file system.
+        to local file system. In addition, this function calls in a second function with
+        an own thread to visualize loading bar in GUI textfield.
         """
-        self.gui_app.record_button["state"] = "disabled"
-
-        # Record audio if audio interface was found
         if self.device is not None and self.index is not None:
+            # Record audio
             audio_stream = AudioStream(self.index)
             self.latest_audio_path, name = audio_stream.record_audio()
+
             print(f"Recorded audio stored here: {self.latest_audio_path}")
             self.add_text(f"[Record] Recorded audio stored here: ../data/records/{name}")
 
         else:
+            print("Audio interface not found. Fallback to pre-defined audio path.")
+            self.add_text("[Record] Audio interface not found. Fallback to pre-defined audio path.")
+            self.add_text("[Record] Simulating audio recording ...")
             # C-Dur (Downloaded from kaggle)
             # self.latest_audio_path = "data/records/Major_0.wav"
             # Self-recorded C-Dur
@@ -44,7 +52,14 @@ class GUIAppController:
             # self.latest_audio_path = "data/records/record-20231223-141414.wav"
             # Self-recorded G-Dur
             # self.latest_audio_path = "data/records/record-20231223-141521.wav"
+            time.sleep(DURATION)
 
+    def perform_chord_detection(self):
+        """
+
+        :return:
+        """
+        print("Chord detection function called")
         # Find chord (record = CNN input, chord = CNN output) and capture image
         chord = self.cd.classify_chord(self.latest_audio_path)
         if chord in CLASSES:
@@ -119,4 +134,4 @@ class GUIAppController:
         """
         self.gui_app.textfield.insert("end", f"{text}\n")
         self.gui_app.textfield.see("end")
-        self.gui_app.root.update()
+        self.gui_app.update()

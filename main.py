@@ -8,10 +8,9 @@ def main():
     Main method to start guitar chord detector with tkinter GUI
     :return: None
     """
-    root = tk.Tk()
-    GUIApp(root)
-    root.protocol("WM_DELETE_WINDOW", GUIApp.on_closing)
-    root.mainloop()
+    app = GUIApp()
+    app.protocol("WM_DELETE_WINDOW", GUIApp.on_closing)
+    app.mainloop()
 
 
 if __name__ == '__main__':

@@ -69,11 +69,11 @@ class AudioStream:
         :param audio_data: recorded audio data
         :param title: title of plotted file (record-YYYYMMDD-HHMM)
         """
-        time = np.arange(0, len(audio_data)) / self.sample_rate
+        time = np.arange(0, len(audio_data)) / SAMPLE_RATE
 
         # Apply Fourier Transform to get the frequency spectrum
         freq_spectrum = np.fft.fft(audio_data)
-        freq_values = np.fft.fftfreq(len(freq_spectrum), 1 / self.sample_rate)
+        freq_values = np.fft.fftfreq(len(freq_spectrum), 1 / SAMPLE_RATE)
         freq_values = freq_values[:len(freq_spectrum) // 2]
 
         # Plot the frequency spectrum
