@@ -132,6 +132,8 @@ class GUIAppController:
         :param text: Text to be printed
         :return: None
         """
+        self.gui_app.textfield.config(state="normal")
         self.gui_app.textfield.insert("end", f"{text}\n")
         self.gui_app.textfield.see("end")
+        self.gui_app.textfield.config(state="disabled")
         self.gui_app.update()

@@ -22,8 +22,8 @@ class GUIApp(tk.Tk):
         self.controller = GUIAppController(self)
 
         # Windows size and positioning (based on main screen)
-        window_height = 540
-        window_width = 960
+        window_height = 600
+        window_width = 1000
         screen = get_monitors()[0]
         y = (screen.height - window_height) // 2
         x = (screen.width - window_width) // 2
@@ -59,6 +59,7 @@ class GUIApp(tk.Tk):
         self.output_frame.pack(padx=5, fill="both", expand=True)
         self.textfield = tk.Text(self.output_frame, wrap="word", height=10, width=50)
         self.textfield.pack(fill="both", expand=True)
+        self.textfield.config(state="disabled")
 
         self.specto_button = ttk.Button(self.right_frame, text="Spectogram", width=9, command=self.spectogram)
         self.specto_button.pack(padx=5, anchor="sw")

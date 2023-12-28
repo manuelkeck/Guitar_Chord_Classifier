@@ -3,6 +3,7 @@ Author: Manuel Keck
 """
 import cv2
 import os
+import time
 
 from Settings import IMAGE_DIR
 
@@ -60,16 +61,23 @@ class Camera:
         :return: Path to captured image
         """
         frame = self.get_frame()
+        counter = 0
+
+        # To avoid OpenCV rowBytes == 0 error
+        while frame is None and counter < 3:
+            frame = self.get_frame()
+            time.sleep(2)
+            counter += 1
 
         if frame is None:
             raise Exception("Error while loading image from stream.")
+        else:
+            # Get name from recorded audio and remove .wav extension to store image with same name
+            image_name, extension = os.path.splitext(os.path.basename(recorded_audio_path))
+            file_extension = ".jpg"
 
-        # Get name from recorded audio and remove .wav extension to store image with same name
-        image_name, extension = os.path.splitext(os.path.basename(recorded_audio_path))
-        file_extension = ".jpg"
-
-        # Save the single captured frame as an image
-        image_path = os.path.join(IMAGE_DIR, f"{image_name}{file_extension}")
-        cv2.imwrite(image_path, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), [int(cv2.IMWRITE_JPEG_QUALITY), 100])
+            # Save the single captured frame as an image
+            image_path = os.path.join(IMAGE_DIR, f"{image_name}{file_extension}")
+            cv2.imwrite(image_path, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), [int(cv2.IMWRITE_JPEG_QUALITY), 100])
 
         return image_path, image_name
