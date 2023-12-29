@@ -1,6 +1,6 @@
 # Guitar Chord Classifier
 
-This project is still under active development.
+Dec. 2023: This project is still under active development.
 
 The main objective of this project is to create an own dataset with images from guitar chords.
 To achieve this, an existing guitar chord detection is integrated.
@@ -28,14 +28,13 @@ In the current version of this project the following chords can be predicted by 
 - G
 
 ## Getting started
-Clone repository with `git clone https://gitlab.reutlingen-university.de/keckm/guitar_chord_detector.git`.
+Clone repository with `git clone https://github.com/manuelkeck/Guitar_Chord_Classifier.git`.
 
 ### Preconditions
 1. [Optional] Connect an audio interface (e.g. Steinberg UR22C)
 2. [Optional] Get idVendor and idProduct from audio interface by entering `lsusb` in macOS/ubuntu terminal and 
 change values in `Settings.py`
-3. Enter camera index in `Settings.py`. MacOS is using camera_index = 1 for inbuild FaceTime HD cam or camera_index = 0 to use iPhone as camera [Docs](https://support.apple.com/de-de/guide/mac-help/mchl77879b8a/mac), Ubuntu uses camera_index = -1
-4. 
+3. Enter camera index in `Settings.py`. MacOS uses camera_index = 1 for inbuild FaceTime HD cam or camera_index = 0 to use iPhone as camera. You can get further information from [Apple docs](https://support.apple.com/de-de/guide/mac-help/mchl77879b8a/mac). Ubuntu used camera_index = -1 in my test environment.
 
 If you are not connecting a physical audio interface, there is a fallback implemented to
 test this project. In this case, one of the example audio files from `data/records/` will be used.
@@ -45,7 +44,7 @@ You can select one of those paths by commenting in or out in line 48-55 in `src/
 To get all needed libraries, open a new terminal and execute `pip install -r requirements.txt` in cloned 
 folder `Guitar_Chord_Classifier`. 
 It is recommended to do this in a virtual environment which can be created with 
-e.g. venv (https://docs.python.org/3/library/venv.html).
+e.g. venv (https://docs.python.org/3/library/venv.html). In this project [Python v3.10.13](https://www.python.org/downloads/release/python-31013/) is used.
 
 ### Part 1: Create dataset(s) with chord images
 Start with `python main.py` in root directory of this project. A Graphical User Interface (GUI) will 
@@ -103,9 +102,12 @@ project. In further developments a new model could be trained, based on given da
 
 ## Authors and acknowledgment
 Manuel Keck\
-Human-Centered Computing (INF)\
+Human-Centered Computing (HUC)\
+Informatics (INF) Faculty\
 Reutlingen University\
 2023
+
+Contact: manuel.keck@student.reutlingen-university.de
 
 This project is a product of HUC2.5 Bildverarbeitung from Human-Centered Computing (INF) at Reutlingen 
 University.
