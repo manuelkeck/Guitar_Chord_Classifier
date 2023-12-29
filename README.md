@@ -29,12 +29,15 @@ In the current version of this project the following chords can be predicted by 
 Clone repository with `git clone https://gitlab.reutlingen-university.de/keckm/guitar_chord_detector.git`.
 
 ### Preconditions
-1. Connect an audio interface (e.g. Steinberg UR22C)
-2. Get idVendor and idProduct from audio interface by entering `lsusb` in macOS/ubuntu terminal
-3. -> enter in settings 
-4. Camera index: macOS (camera_index=1), ubuntu (camera_index=-1)
-5. -> enter in settings
-6. 
+1. [Optional] Connect an audio interface (e.g. Steinberg UR22C)
+2. [Optional] Get idVendor and idProduct from audio interface by entering `lsusb` in macOS/ubuntu terminal and 
+change values in `Settings.py`
+3. Enter camera index in `Settings.py`: macOS (camera_index=1), ubuntu (camera_index=-1)
+4. 
+
+If you are not connecting a physical audio interface, there is a fallback implemented to
+test this project. In this case, one of the example audio files from `data/records/` will be used.
+You can select one of those paths by commenting in or out in line 48-55 in `src/user_interface/GUIAppController.py`.
 
 ### Install libraries
 To get all needed libraries, open a new terminal and execute `pip install -r requirements.txt` in cloned 
@@ -43,8 +46,7 @@ It is recommended to do this in a virtual environment which can be created with
 e.g. venv (https://docs.python.org/3/library/venv.html).
 
 ### Part 1: Create dataset(s) with chord images
-To reproduce this part, change branch to `create_dataset` with command `git checkout create_dataset`.
-After changing branch successfully, start with `python main.py`. A Graphical User Interface (GUI) will 
+Start with `python main.py` in root directory of this project. A Graphical User Interface (GUI) will 
 be opened.
 
 The GUI will look like this:
