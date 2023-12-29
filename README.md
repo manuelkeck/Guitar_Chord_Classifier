@@ -10,8 +10,10 @@ For chord detection, some parts of this project are integrated:
 https://github.com/ayushkumarshah/Guitar-Chords-recognition
 This project is licenced under [GNU GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
-After the collection of a meaningful sum of images is done (separated in training and validation datasets), 
+After the collection of a meaningful sum of images is finished (separated in training, test and validation datasets), 
 an own Convolutional Neural Network (CNN) will be trained, based on the created dataset.
+
+The used architecture will be explained once it is performed successfully.
 
 In the current version of this project the following chords can be predicted by CNN:
 - A
@@ -32,7 +34,7 @@ Clone repository with `git clone https://gitlab.reutlingen-university.de/keckm/g
 1. [Optional] Connect an audio interface (e.g. Steinberg UR22C)
 2. [Optional] Get idVendor and idProduct from audio interface by entering `lsusb` in macOS/ubuntu terminal and 
 change values in `Settings.py`
-3. Enter camera index in `Settings.py`: macOS (camera_index=1), ubuntu (camera_index=-1)
+3. Enter camera index in `Settings.py`. MacOS is using camera_index = 1 for inbuild FaceTime HD cam or camera_index = 0 to use iPhone as camera [Docs](https://support.apple.com/de-de/guide/mac-help/mchl77879b8a/mac), Ubuntu uses camera_index = -1
 4. 
 
 If you are not connecting a physical audio interface, there is a fallback implemented to
@@ -41,7 +43,7 @@ You can select one of those paths by commenting in or out in line 48-55 in `src/
 
 ### Install libraries
 To get all needed libraries, open a new terminal and execute `pip install -r requirements.txt` in cloned 
-folder `Guitar_Chord_Detector`. 
+folder `Guitar_Chord_Classifier`. 
 It is recommended to do this in a virtual environment which can be created with 
 e.g. venv (https://docs.python.org/3/library/venv.html).
 
