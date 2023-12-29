@@ -5,7 +5,8 @@ import cv2
 import os
 import time
 
-from Settings import IMAGE_DIR
+from Settings import IMAGE_DIR, CAMERA_INDEX
+from src.data.Image import ImageProcessing
 
 
 class Camera:
@@ -13,16 +14,18 @@ class Camera:
     This class initializes the hardware camera and implements functions for camera handling. This is needed for
     camera preview in GUI and capturing images.
     """
-    def __init__(self, camera_index=1):
+    def __init__(self, gui_app):
         """
         The selected camera will be initialized. A live stream from camera image will be prepared with self.cap.
         The width and height parameters are needed values for GUI.
         :param camera_index: index of camera. macOS camera_index = 1, ubuntu camera_index = -1
         """
-        self.camera_index = camera_index
+        self.camera_index = CAMERA_INDEX
         self.cap = cv2.VideoCapture(self.camera_index)
         self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        self.gui_app = gui_app
+        self.image_processing = ImageProcessing(self.gui_app)
 
         if not self.cap.isOpened():
             raise Exception("Camera could not be opened.")
@@ -54,14 +57,19 @@ class Camera:
 
     def capture_image(self, recorded_audio_path):
         """
-        This function is called after a chord was classified. An image will be captured and stored with same name like
-        corresponding audio file (with .jpg prefix). This function will call the get_frame() function to capture one
-        single frame from camera stream.
+        This function is called after a chord was classified. An image will be
+        captured and same name like corresponding audio file (with
+        .jpg prefix) will be used. This function will call the get_frame() function
+        to capture one single frame from camera stream.
+        The captured frame will be processed in Image class to get a cropped image
+        based on recognized hand. This image will be stored to local file system.
         :param recorded_audio_path: Path to previously recorded audio file
         :return: Path to captured image
         """
         frame = self.get_frame()
         counter = 0
+
+        print("Capturing image...")
 
         # To avoid OpenCV rowBytes == 0 error
         while frame is None and counter < 3:
@@ -76,8 +84,10 @@ class Camera:
             image_name, extension = os.path.splitext(os.path.basename(recorded_audio_path))
             file_extension = ".jpg"
 
-            # Save the single captured frame as an image
+            # Create path with file name to save image locally
             image_path = os.path.join(IMAGE_DIR, f"{image_name}{file_extension}")
-            cv2.imwrite(image_path, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), [int(cv2.IMWRITE_JPEG_QUALITY), 100])
 
-        return image_path, image_name
+            # Send image to crop function
+            ImageProcessing.crop_captured_image(self.image_processing, frame, image_path)
+
+        #return image_path, image_name

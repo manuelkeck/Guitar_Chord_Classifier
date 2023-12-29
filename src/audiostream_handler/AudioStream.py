@@ -5,6 +5,7 @@ import pyaudio
 import numpy as np
 import wavio
 import matplotlib.pyplot as plt
+import sys
 
 from datetime import datetime
 from Settings import RECORDING_DIR, SAMPLE_RATE, DURATION, CHUNK_SIZE, MAX_INPUT_CHANNELS
@@ -55,7 +56,17 @@ class AudioStream:
             wavio.write(self.record_filename, self.recorded_data.astype(np.int16), SAMPLE_RATE)
 
             print(f"Recording saved as {self.record_filename}")
-            self.visualize_audio(self.recorded_data, self.record_filename)
+            # self.visualize_audio(self.recorded_data, self.record_filename)
+
+        except IOError as e:
+            print(f"IOError: {e}")
+            sys.exit(1)
+        except ValueError as e:
+            print(f"ValueError: {e}")
+            sys.exit(1)
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            sys.exit(1)
 
         finally:
             self.stream.stop_stream()

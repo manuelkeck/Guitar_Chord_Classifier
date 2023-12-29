@@ -1,0 +1,1 @@
+This folder will contain the self-trained model and weights-file for video based chord detection.

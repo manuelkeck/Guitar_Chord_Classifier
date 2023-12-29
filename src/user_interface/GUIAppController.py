@@ -3,12 +3,14 @@ Author: Manuel Keck
 """
 import os
 import time
+import cv2
 
 from src.device_handler.AudioInterface import AudioInterface
 from src.audiostream_handler.AudioStream import AudioStream
 from src.chord_detection.ChordDetector import ChordDetector
 from Settings import CLASSES, DURATION
 from src.TestVisualization import plot_spectogram
+from src.data.Image import ImageProcessing
 
 
 class GUIAppController:
@@ -48,9 +50,9 @@ class GUIAppController:
             # C-Dur (Downloaded from kaggle)
             # self.latest_audio_path = "data/records/Major_0.wav"
             # Self-recorded C-Dur
-            self.latest_audio_path = "data/records/record-20231223-141242.wav"
+            # self.latest_audio_path = "data/records/record-20231223-141242.wav"
             # Self-recorded D-Dur
-            # self.latest_audio_path = "data/records/record-20231223-141414.wav"
+            self.latest_audio_path = "data/records/record-20231223-141414.wav"
             # Self-recorded G-Dur
             # self.latest_audio_path = "data/records/record-20231223-141521.wav"
             time.sleep(DURATION)
@@ -58,8 +60,8 @@ class GUIAppController:
 
     def perform_chord_detection(self):
         """
-
-        :return:
+        Chord will be detected by CNN. Then, an image will be captured and stored to local
+        file system.
         """
         print("Chord detection function called")
         # Find chord (record = CNN input, chord = CNN output) and capture image
@@ -68,9 +70,10 @@ class GUIAppController:
             print(f"Recorded chord is: {chord}. \nImage will be captured.")
             self.add_text(f"[Record] Recorded chord is: {chord}. \n[Record] Image will be captured.")
             try:
-                self.latest_image_path, name = self.gui_app.camera.capture_image(self.latest_audio_path)
-                print(f"Image stored here: {self.latest_image_path}")
-                self.add_text(f"[Record] Image stored here: ../data/images/{name}.jpg")
+                # self.latest_image_path, name = self.gui_app.camera.capture_image(self.latest_audio_path)
+                self.gui_app.camera.capture_image(self.latest_audio_path)
+                # print(f"Image stored here: {self.latest_image_path}")
+                # self.add_text(f"[Record] Image stored here: ../data/images/{name}.jpg")
             except OSError:
                 print("An error occurred: Camera not reachable.")
                 self.add_text("[Record] An error occurred: Camera not reachable.")
