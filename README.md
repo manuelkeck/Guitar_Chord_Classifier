@@ -88,7 +88,7 @@ and re-train the model.
 ### Audio preprocessing
 To increase the accuracy of prediction, a preprocessing algorithm for recorded audio can be helpful.
 This is not implemented in the current version of this project. To achieve a mostly clean audio file, the
-gain option of the audio interface is adjusted to avoid noised and get a sufficient recognition of the 
+gain option of the audio interface is adjusted to avoid noises and get a sufficient recognition of the 
 played chord.
 
 ### Improve CNN model
