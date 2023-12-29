@@ -1,4 +1,4 @@
-# Guitar Chord Detector
+# Guitar Chord Classifier
 
 This project is still under active development.
 
