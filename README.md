@@ -1,5 +1,7 @@
 # Guitar Chord Detector
 
+This project is still under development.
+
 The main objective of this project is to create an own dataset with images from guitar chords.
 To achieve this, an existing guitar chord detection is integrated.
 If a chord was detected successfully, an image will be created, labelled and stored.
