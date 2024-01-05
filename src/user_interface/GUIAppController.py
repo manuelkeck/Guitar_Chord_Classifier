@@ -10,7 +10,6 @@ from src.audiostream_handler.AudioStream import AudioStream
 from src.chord_detection.ChordDetector import ChordDetector
 from Settings import CLASSES, DURATION
 from src.TestVisualization import plot_spectogram
-from src.data.Image import ImageProcessing
 
 
 class GUIAppController:

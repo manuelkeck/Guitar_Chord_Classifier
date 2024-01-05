@@ -14,7 +14,7 @@ class Camera:
     This class initializes the hardware camera and implements functions for camera handling. This is needed for
     camera preview in GUI and capturing images.
     """
-    def __init__(self, gui_app):
+    def __init__(self, gui_app, controller):
         """
         The selected camera will be initialized. A live stream from camera image will be prepared with self.cap.
         The width and height parameters are needed values for GUI.
@@ -25,7 +25,8 @@ class Camera:
         self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.gui_app = gui_app
-        self.image_processing = ImageProcessing(self.gui_app)
+        self.controller = controller
+        self.image_processing = ImageProcessing(self.gui_app, self.controller)
 
         if not self.cap.isOpened():
             raise Exception("Camera could not be opened.")

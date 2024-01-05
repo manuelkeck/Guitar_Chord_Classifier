@@ -10,8 +10,7 @@ from tkinter import ttk
 from screeninfo import get_monitors
 from src.user_interface.GUIAppController import GUIAppController
 from src.device_handler.Camera import Camera
-from src.data.Image import ImageProcessing
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageOps
 from Settings import DURATION
 
 
@@ -19,10 +18,11 @@ class GUIApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Recording Tool")
-        self.camera = Camera(self)
         self.controller = GUIAppController(self)
+        self.camera = Camera(self, self.controller)
+        self.recalculated_width, self.recalculated_height = None, None
 
-        # Windows size and positioning (based on main screen)
+        # Windows size and positioning (based on user's main screen)
         window_height = 560
         window_width = 1000
         screen = get_monitors()[0]
@@ -47,10 +47,11 @@ class GUIApp(tk.Tk):
 
         self.camera_label = ttk.Label(self.left_frame, text="Camera Preview")
         self.camera_label.pack(padx=5, pady=10, anchor="n")
-        self.video_label = tk.Label(self.left_frame, width=352, height=198)
+        self.video_label = tk.Label(self.left_frame, width=348, height=194)
         self.video_label.pack(pady=3)
-        self.update_camera()
-        self.landmark_image = tk.Label(self.left_frame, width=352, height=198)
+        self.after(100, self.delayed_aspect_ratio)
+        self.after(100, self.update_camera)
+        self.landmark_image = tk.Label(self.left_frame, width=348, height=194)
         self.landmark_image.pack(pady=10, anchor="s")
 
         # Right frame #######################################################
@@ -67,8 +68,6 @@ class GUIApp(tk.Tk):
 
         self.specto_button = ttk.Button(self.right_frame, text="Spectogram", width=9, command=self.spectogram)
         self.specto_button.pack(padx=5, anchor="sw")
-        # self.test_button = ttk.Button(self.right_frame, text="Bild", command=self.show_captured_image)
-        # self.test_button.pack()
 
         self.progress_frame = tk.Frame(self.right_frame)
         self.progress_frame.pack(anchor="e", side="right")
@@ -126,28 +125,45 @@ class GUIApp(tk.Tk):
     def discard(self):
         self.controller.discard_record()
 
+    def aspect_ratio(self):
+        frame = self.camera.get_frame()
+
+        # Calculate webcam aspect ratio
+        video_aspect = frame.shape[1] / frame.shape[0]
+        print(f"Identified webcam resolution: {frame.shape[1]} x {frame.shape[0]}. Aspect ratio: {video_aspect}")
+        label_aspect = self.video_label.winfo_width() / self.video_label.winfo_height()
+        print(f"Label: {self.video_label.winfo_width()} x {self.video_label.winfo_height()}. Aspect ratio: {label_aspect}")
+
+        # Scale width or height based on calculated formats
+        if label_aspect > video_aspect:
+            new_height = self.video_label.winfo_height()
+            new_width = int(video_aspect * new_height)
+        else:
+            new_width = self.video_label.winfo_width()
+            new_height = int(new_width / video_aspect)
+
+        return new_width, new_height
+
+    def delayed_aspect_ratio(self):
+        """
+        This is needed because GUI needs some time to built up
+        """
+        self.recalculated_width, self.recalculated_height = self.aspect_ratio()
+
     def update_camera(self):
         frame = self.camera.get_frame()
         if frame is not None:
             # frame = cv2.flip(frame, 1)
             img = Image.fromarray(frame)
-            img = img.resize((self.video_label.winfo_width(), self.video_label.winfo_height()), Image.LANCZOS)
+            img = img.resize((self.recalculated_width, self.recalculated_height), Image.LANCZOS)
+            img = ImageOps.pad(img, (
+                self.video_label.winfo_width(),
+                self.video_label.winfo_height()
+            ), color='black')
             img = ImageTk.PhotoImage(img)
             self.video_label.configure(image=img)
             self.video_label.image = img
         self.after(10, self.update_camera)
-
-    # def show_captured_image(self):
-    #     image = self.controller.show_landmark_image()
-    #     cv2.imshow("Landmark Image", image)
-    #     cv2.waitKey()
-    #     cv2.destroyWindow("Landmark Image")
-    #     # print(type(image))
-    #     # image_pil = Image.fromarray(image)
-    #     # image_pil = image_pil.resize((self.landmark_image.winfo_width(), self.landmark_image.winfo_height()), Image.LANCZOS)
-    #     # image_tk = ImageTk.PhotoImage(image=image_pil)
-    #     # self.landmark_image.config(image=image_tk)
-    #     # self.landmark_image.image = image_tk
 
     def on_closing(self):
         self.camera.release()

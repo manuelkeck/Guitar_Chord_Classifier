@@ -48,6 +48,6 @@ CHUNK_SIZE = 1024
 # 1 = MacBook inbuilt FaceTime HD cam
 CAMERA_INDEX = 0
 
-# Target sizes for cropped images
+# Target sizes for cropped images (format 16:9)
 Y_TARGET = 360
 X_TARGET = 640
