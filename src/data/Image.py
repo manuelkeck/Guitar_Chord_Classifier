@@ -83,14 +83,15 @@ class ImageProcessing:
             #         cv2.circle(hand_image, (lx, ly), 5, (0, 255, 0), -1)
 
             # Save image to local file system
-            self.controller.add_text(f"[Image]: Cropped image will be saved here: {image_path}")
+            self.controller.add_text(f"[Image] Cropped image will be saved here: {image_path}")
+            self.controller.latest_image_path = image_path
             cv2.imwrite(image_path, rgb_image)
             print(f"Image stored here: {image_path}")
         else:
             print("No landmarks found.")
-            self.controller.add_text("[Image]: No landmarks found!")
+            self.controller.add_text("[Image] No landmarks found!")
 
-        self.controller.add_text("[Image]: Check captured image presented on left side.")
+        self.controller.add_text("[Image] Check captured image presented on left side.")
 
         # Show captured image on GUI (with landmarks, if found)
         print(type(rgb_image))
