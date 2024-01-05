@@ -21,6 +21,7 @@ class GUIAppController:
         self.gui_app = gui_app
         self.latest_audio_path = ""
         self.latest_image_path = ""
+        self.image_captured = False
         self.start_time = None
         self.recording_thread = None
         self.device, self.index = AudioInterface.find_device()
@@ -98,7 +99,7 @@ class GUIAppController:
         This is needed, in case that identified chord was wrong or insufficient.
         :return: None
         """
-        if self.latest_audio_path == "" or self.latest_image_path == "":
+        if self.latest_audio_path == "":
             print("Recording audio needed to discard record.")
             self.add_text("[Discard] Record audio first to discard record.")
         else:
@@ -108,14 +109,18 @@ class GUIAppController:
 
             # discard files
             try:
-                # os.remove(self.latest_audio_path)
-                os.remove(self.latest_image_path)
+                os.remove(self.latest_audio_path)
+                if self.latest_image_path != "":
+                    os.remove(self.latest_image_path)
+                else:
+                    print("No image captured. Only audio record will be deleted.")
                 print("Files were deleted.")
                 audio_name = os.path.basename(tmp_audio)
                 image_name = os.path.basename(tmp_image)
                 self.add_text("[Discard] The following files will be discarded:")
                 self.add_text(f"[Discard] {audio_name}")
-                self.add_text(f"[Discard] {image_name}")
+                if self.latest_image_path != "":
+                    self.add_text(f"[Discard] {image_name}")
             except FileNotFoundError:
                 print("Files to delete not found.")
                 self.add_text("[Discard] Files not found.")

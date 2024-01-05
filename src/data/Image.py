@@ -76,12 +76,6 @@ class ImageProcessing:
 
             rgb_image = hand_image
 
-            # Draw landmarks on image
-            # for landmark in hand_landmarks.landmark:
-            #     lx, ly = int((landmark.x * w) - min_x), int((landmark.y * h) - min_y)
-            #     if 0 <= lx < X_TARGET and 0 <= ly < Y_TARGET:
-            #         cv2.circle(hand_image, (lx, ly), 5, (0, 255, 0), -1)
-
             # Save image to local file system
             self.controller.add_text(f"[Image] Cropped image will be saved here: {image_path}")
             self.controller.latest_image_path = image_path
