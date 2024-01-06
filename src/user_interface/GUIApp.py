@@ -129,7 +129,7 @@ class GUIApp(tk.Tk):
         print("User input:", user_input)
         popup.destroy()
 
-        if user_input in CLASSES:
+        if user_input in CLASSES or user_input == "None":
             self.controller.add_text(f"Capturing images for chord {user_input} "
                                      f"will be started.")
             _thread.start_new_thread(self.main_task, (AMOUNT, "fast-lane"))

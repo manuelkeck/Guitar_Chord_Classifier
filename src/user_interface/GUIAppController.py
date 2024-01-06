@@ -153,9 +153,8 @@ class GUIAppController:
         time-consuming audio chord detection, the chord will be entered
         manually in popup textfield.
         """
-        counter = 9
+        counter = 0
         path = get_folder(chord)
-        print(f"PFAD: {path}")
         index = get_index(path)
 
         print(f"Type of index: {type(index)}")
@@ -168,7 +167,7 @@ class GUIAppController:
                 print(f"{counter}/{AMOUNT}")
                 self.add_text(f"Images captured: {counter}/{AMOUNT}")
             # Increase timer delay if performance is not sufficient
-            time.sleep(1)
+            time.sleep(0.5)
 
         # Update index in corresponding info.json
         update_index(path, index)
