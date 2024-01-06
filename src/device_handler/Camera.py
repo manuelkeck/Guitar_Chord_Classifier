@@ -69,6 +69,7 @@ class Camera:
         """
         frame = self.get_frame()
         counter = 0
+        check_var = False
 
         print("Capturing image...")
 
@@ -89,6 +90,6 @@ class Camera:
             image_path = os.path.join(IMAGE_DIR, f"{image_name}{file_extension}")
 
             # Send image to crop function
-            ImageProcessing.crop_captured_image(self.image_processing, frame, image_path)
+            check_var = ImageProcessing.crop_captured_image(self.image_processing, frame, image_path)
 
-        #return image_path, image_name
+        return check_var

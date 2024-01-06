@@ -37,6 +37,7 @@ class ImageProcessing:
         """
         rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         results = self.hands.process(rgb_image)
+        check_var = False
 
         if results.multi_hand_landmarks:
             print("Landmarks found.")
@@ -81,9 +82,11 @@ class ImageProcessing:
             self.controller.latest_image_path = image_path
             cv2.imwrite(image_path, rgb_image)
             print(f"Image stored here: {image_path}")
+            check_var = True
         else:
             print("No landmarks found.")
             self.controller.add_text("[Image] No landmarks found!")
+            check_var = False
 
         self.controller.add_text("[Image] Check captured image presented on left side.")
 
@@ -97,3 +100,5 @@ class ImageProcessing:
         image_tk = ImageTk.PhotoImage(image=image_pil)
         self.gui_app.landmark_image.config(image=image_tk)
         self.gui_app.landmark_image.image = image_tk
+
+        return check_var

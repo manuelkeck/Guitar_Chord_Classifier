@@ -3,13 +3,13 @@ Author: Manuel Keck
 """
 import os
 import time
-import cv2
 
 from src.device_handler.AudioInterface import AudioInterface
 from src.audiostream_handler.AudioStream import AudioStream
 from src.chord_detection.ChordDetector import ChordDetector
 from Settings import CLASSES, DURATION
 from src.TestVisualization import plot_spectogram
+from datetime import datetime
 
 
 class GUIAppController:
@@ -144,3 +144,24 @@ class GUIAppController:
         self.gui_app.textfield.see("end")
         self.gui_app.textfield.config(state="disabled")
         self.gui_app.update()
+
+    def chord_fastlane_dataset(self, chord):
+        """
+        This function will take 10 images with 1 sec delay between each
+        captured image and stores this to local file system. To avoid
+        time-consuming audio chord detection, the chord will be entered
+        manually in popup textfield. If no landmarks were be found, the
+        counter will not increase.
+        """
+        counter = 0
+        amount = 10
+
+        while counter < amount:
+            timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+            file_name = f"record-{timestamp}.wav"
+            if self.gui_app.camera.capture_image(file_name):
+                counter += 1
+            # Increase timer delay if performance is not sufficient
+            time.sleep(1)
+
+        self.add_text(f"You have successfully captured {amount} images from chord {chord}.")

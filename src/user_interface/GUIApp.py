@@ -11,7 +11,7 @@ from screeninfo import get_monitors
 from src.user_interface.GUIAppController import GUIAppController
 from src.device_handler.Camera import Camera
 from PIL import Image, ImageTk, ImageOps
-from Settings import DURATION
+from Settings import DURATION, CLASSES
 
 
 class GUIApp(tk.Tk):
@@ -66,13 +66,13 @@ class GUIApp(tk.Tk):
         self.textfield.pack(fill="both", expand=True)
         self.textfield.config(state="disabled")
 
-        self.specto_button = ttk.Button(self.right_frame, text="Spectogram", width=9, command=self.spectogram)
-        self.specto_button.pack(padx=5, anchor="sw")
+        self.specto_button = ttk.Button(self.right_frame, text="Spectogram", width=10, command=self.spectogram)
+        self.specto_button.pack(padx=5, pady=5, anchor="sw")
 
         self.progress_frame = tk.Frame(self.right_frame)
         self.progress_frame.pack(anchor="e", side="right")
-        self.discard_button = ttk.Button(self.right_frame, text="Discard", width=9, command=self.discard)
-        self.discard_button.pack(padx=5, anchor="sw")
+        self.discard_button = ttk.Button(self.right_frame, text="Discard", width=10, command=self.discard)
+        self.discard_button.pack(padx=5, pady=5, anchor="sw")
         self.progress_label = ttk.Label(self.progress_frame, text="Recording progress")
         self.progress_label.pack(padx=6, anchor="w")
         self.progressbar = ttk.Progressbar(self.progress_frame, orient="horizontal", length=200, mode="determinate")
@@ -89,11 +89,53 @@ class GUIApp(tk.Tk):
 
         self.recording_frame = tk.Frame(self.bottom_frame)
         self.recording_frame.pack(padx=5, side="right", fill="both")
-        self.record_button = ttk.Button(self.recording_frame, text="Record", command=self.start_recording)
+        self.record_button = ttk.Button(self.recording_frame, text="Record", command=self.record_audio)
         self.record_button.pack(padx=5, anchor="e", side="right")
+        self.create_button = ttk.Button(self.recording_frame, text="Create", command=self.open_popup)
+        self.create_button.pack(padx=5, anchor="e", side="right")
 
         self.bottom_frame.pack_propagate(False)
         self.bottom_frame.pack_propagate(True)
+
+    def open_popup(self):
+        popup = tk.Toplevel(self)
+        popup.title("Chord")
+
+        main_window_x = self.winfo_x()
+        main_window_y = self.winfo_y()
+        main_window_width = self.winfo_width()
+        main_window_height = self.winfo_height()
+
+        popup_width = 250
+        popup_height = 150
+        popup_x = main_window_x + (main_window_width - popup_width) // 2
+        popup_y = main_window_y + (main_window_height - popup_height) // 2
+
+        popup.geometry(f"{popup_width}x{popup_height}+{popup_x}+{popup_y}")
+
+        container = tk.Frame(popup)
+        container.pack()
+        label = tk.Label(container, text="Enter the chord for which you want\n to capture images for the dataset:")
+        label.pack()
+        entry = tk.Entry(container)
+        entry.pack()
+        confirm_button = tk.Button(popup, text="Confirm", command=lambda: self.on_confirm(entry.get(), popup))
+        confirm_button.pack(side=tk.RIGHT, padx=(10, 20), pady=10)
+
+        cancel_button = tk.Button(popup, text="Cancel", command=popup.destroy)
+        cancel_button.pack(side=tk.LEFT, padx=(20, 10), pady=10)
+
+    def on_confirm(self, user_input, popup):
+        print("User input:", user_input)
+        popup.destroy()
+
+        if user_input in CLASSES:
+            self.controller.add_text(f"Capturing images for chord {user_input} "
+                                     f"will be started.")
+            self.controller.chord_fastlane_dataset(user_input)
+        else:
+            self.controller.add_text("Please enter one of the following chords: "
+                                     "A, Am, Bm, C, D, Dm, E, Em, F, G")
 
     def start_recording(self):
         self.record_button["state"] = "disable"
