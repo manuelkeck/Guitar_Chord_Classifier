@@ -47,7 +47,7 @@ CHUNK_SIZE = 1024
 # 0 = MacBook with iPhone as cam
 # 1 = MacBook inbuilt FaceTime HD cam
 # 2 = Ubuntu Iriun Webcam Software for iPhone as external cam
-CAMERA_INDEX = 1
+CAMERA_INDEX = 0
 
 # Target sizes for cropped images (format 16:9)
 Y_TARGET = 360

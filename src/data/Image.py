@@ -101,11 +101,3 @@ class ImageProcessing:
         self.gui_app.landmark_image.image = image_tk
 
         return check_var
-
-    def crop_captured_image_by_bounding_box(self, image: np.ndarray, image_path: str):
-        """
-        This function implements a light-weighted option to detect the part of
-        captured image with the hand
-        """
-        
-        pass

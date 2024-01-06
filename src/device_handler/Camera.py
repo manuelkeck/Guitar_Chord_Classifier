@@ -4,10 +4,10 @@ Author: Manuel Keck
 import cv2
 import os
 import time
-import inspect
 
 from Settings import IMAGE_DIR, CAMERA_INDEX
 from src.data.Image import ImageProcessing
+from src.data.ImageHelpers import capture_image, get_folder, get_index
 
 
 class Camera:
@@ -57,7 +57,7 @@ class Camera:
         else:
             return None
 
-    def capture_image(self, recorded_audio_path, flag: str):
+    def capture_image(self, chord: str, recorded_audio_path, flag: str):
         """
         This function is called after a chord was classified. An image will be
         captured and same name like corresponding audio file (with
@@ -65,6 +65,7 @@ class Camera:
         to capture one single frame from camera stream.
         The captured frame will be processed in Image class to get a cropped image
         based on recognized hand. This image will be stored to local file system.
+        :param chord: Chord, which will be captured
         :param recorded_audio_path: Path to previously recorded audio file
         :param flag: Will be used to determine caller function (needed for fast-lane
         implementation)
@@ -94,8 +95,8 @@ class Camera:
 
             # Send image to crop function
             if flag == "fast-lane":
-                print("Fast-lane reached")
-                ImageProcessing.crop_captured_image_by_bounding_box(self.image_processing, frame, image_path)
+                # ImageProcessing.crop_captured_image_by_bounding_box(self.image_processing, frame, image_path)
+                capture_image(frame, recorded_audio_path)
                 check_var = True
             else:
                 check_var = ImageProcessing.crop_captured_image_by_landmarks(self.image_processing, frame, image_path)
