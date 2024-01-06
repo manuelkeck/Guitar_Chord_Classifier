@@ -4,6 +4,7 @@ Author: Manuel Keck
 import cv2
 import os
 import time
+import inspect
 
 from Settings import IMAGE_DIR, CAMERA_INDEX
 from src.data.Image import ImageProcessing
@@ -56,7 +57,7 @@ class Camera:
         else:
             return None
 
-    def capture_image(self, recorded_audio_path):
+    def capture_image(self, recorded_audio_path, flag: str):
         """
         This function is called after a chord was classified. An image will be
         captured and same name like corresponding audio file (with
@@ -65,6 +66,8 @@ class Camera:
         The captured frame will be processed in Image class to get a cropped image
         based on recognized hand. This image will be stored to local file system.
         :param recorded_audio_path: Path to previously recorded audio file
+        :param flag: Will be used to determine caller function (needed for fast-lane
+        implementation)
         :return: Path to captured image
         """
         frame = self.get_frame()
@@ -90,6 +93,11 @@ class Camera:
             image_path = os.path.join(IMAGE_DIR, f"{image_name}{file_extension}")
 
             # Send image to crop function
-            check_var = ImageProcessing.crop_captured_image(self.image_processing, frame, image_path)
+            if flag == "fast-lane":
+                print("Fast-lane reached")
+                ImageProcessing.crop_captured_image_by_bounding_box(self.image_processing, frame, image_path)
+                check_var = True
+            else:
+                check_var = ImageProcessing.crop_captured_image_by_landmarks(self.image_processing, frame, image_path)
 
         return check_var

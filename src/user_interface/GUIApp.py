@@ -2,7 +2,6 @@
 Author: Manuel Keck
 """
 import tkinter as tk
-import cv2
 import time
 import _thread
 
@@ -11,7 +10,7 @@ from screeninfo import get_monitors
 from src.user_interface.GUIAppController import GUIAppController
 from src.device_handler.Camera import Camera
 from PIL import Image, ImageTk, ImageOps
-from Settings import DURATION, CLASSES
+from Settings import DURATION, CLASSES, AMOUNT
 
 
 class GUIApp(tk.Tk):
@@ -89,7 +88,7 @@ class GUIApp(tk.Tk):
 
         self.recording_frame = tk.Frame(self.bottom_frame)
         self.recording_frame.pack(padx=5, side="right", fill="both")
-        self.record_button = ttk.Button(self.recording_frame, text="Record", command=self.record_audio)
+        self.record_button = ttk.Button(self.recording_frame, text="Record", command=self.start_recording)
         self.record_button.pack(padx=5, anchor="e", side="right")
         self.create_button = ttk.Button(self.recording_frame, text="Create", command=self.open_popup)
         self.create_button.pack(padx=5, anchor="e", side="right")
@@ -126,36 +125,41 @@ class GUIApp(tk.Tk):
         cancel_button.pack(side=tk.LEFT, padx=(20, 10), pady=10)
 
     def on_confirm(self, user_input, popup):
+        self.create_button["state"] = "disable"
         print("User input:", user_input)
         popup.destroy()
 
         if user_input in CLASSES:
             self.controller.add_text(f"Capturing images for chord {user_input} "
                                      f"will be started.")
-            self.controller.chord_fastlane_dataset(user_input)
+            _thread.start_new_thread(self.main_task, (AMOUNT, "fast-lane"))
+            _thread.start_new_thread(self.controller.chord_fastlane_dataset, (user_input,))
         else:
             self.controller.add_text("Please enter one of the following chords: "
                                      "A, Am, Bm, C, D, Dm, E, Em, F, G")
 
     def start_recording(self):
         self.record_button["state"] = "disable"
-        _thread.start_new_thread(self.main_task, ())
+        _thread.start_new_thread(self.main_task, (DURATION, ""))
         _thread.start_new_thread(self.record_audio, ())
 
-    def main_task(self):
+    def main_task(self, duration: int, flag: str):
         """
         Contains progressbar and further processing of logic after recording is done
         """
         print(f"Task 1: GUI with progress bar. Thread-ID: {_thread.get_ident()}")
-        for i in range(DURATION * 10):
+        for i in range(duration * 10):
             time.sleep(0.1)
-            self.progressbar["value"] = (i + 1) / (DURATION * 10) * 100
+            self.progressbar["value"] = (i + 1) / (duration * 10) * 100
             self.update_idletasks()
-        print("Both tasks completed, chord detection will be called.")
-        self.controller.perform_chord_detection()
-        # print(f"Path: {self.controller.latest_image_path}")
-        # self.show_captured_image(self.controller.latest_image_path)
+
+        print("Both tasks completed.")
+
+        if flag != "fast-lane":
+            self.controller.perform_chord_detection()
+
         self.record_button["state"] = "normal"
+        self.create_button["state"] = "normal"
 
     def record_audio(self):
         print(f"Task 2: Audio Recording. Thread-ID: {_thread.get_ident()}")

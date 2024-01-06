@@ -7,7 +7,7 @@ import time
 from src.device_handler.AudioInterface import AudioInterface
 from src.audiostream_handler.AudioStream import AudioStream
 from src.chord_detection.ChordDetector import ChordDetector
-from Settings import CLASSES, DURATION
+from Settings import CLASSES, DURATION, AMOUNT
 from src.TestVisualization import plot_spectogram
 from datetime import datetime
 
@@ -71,7 +71,7 @@ class GUIAppController:
             self.add_text(f"[Record] Recorded chord is: {chord}. \n[Record] Image will be captured.")
             try:
                 # self.latest_image_path, name = self.gui_app.camera.capture_image(self.latest_audio_path)
-                self.gui_app.camera.capture_image(self.latest_audio_path)
+                self.gui_app.camera.capture_image(self.latest_audio_path, "")
                 # print(f"Image stored here: {self.latest_image_path}")
                 # self.add_text(f"[Record] Image stored here: ../data/images/{name}.jpg")
             except OSError:
@@ -154,14 +154,18 @@ class GUIAppController:
         counter will not increase.
         """
         counter = 0
-        amount = 10
 
-        while counter < amount:
+        # Needed to be synced with progress bar
+        time.sleep(1)
+
+        while counter < AMOUNT:
             timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
             file_name = f"record-{timestamp}.wav"
-            if self.gui_app.camera.capture_image(file_name):
+            if self.gui_app.camera.capture_image(file_name, "fast-lane"):
                 counter += 1
+                print(f"{counter}/{AMOUNT}")
+                self.add_text(f"Images captured: {counter}/{AMOUNT}")
             # Increase timer delay if performance is not sufficient
-            time.sleep(1)
+            time.sleep(2)
 
-        self.add_text(f"You have successfully captured {amount} images from chord {chord}.")
+        self.add_text(f"You have successfully captured {AMOUNT} images from chord {chord}.")

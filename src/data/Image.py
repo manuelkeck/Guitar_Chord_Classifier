@@ -29,7 +29,7 @@ class ImageProcessing:
             min_detection_confidence=0.1
         )
 
-    def crop_captured_image(self, image: np.ndarray, image_path: str):
+    def crop_captured_image_by_landmarks(self, image: np.ndarray, image_path: str):
         """
         Crop captured image based on hand
         :param image: Image (frame) numpy array
@@ -91,7 +91,6 @@ class ImageProcessing:
         self.controller.add_text("[Image] Check captured image presented on left side.")
 
         # Show captured image on GUI (with landmarks, if found)
-        print(type(rgb_image))
         image_pil = Image.fromarray(rgb_image)
         image_pil = image_pil.resize((
             self.gui_app.landmark_image.winfo_width(),
@@ -102,3 +101,11 @@ class ImageProcessing:
         self.gui_app.landmark_image.image = image_tk
 
         return check_var
+
+    def crop_captured_image_by_bounding_box(self, image: np.ndarray, image_path: str):
+        """
+        This function implements a light-weighted option to detect the part of
+        captured image with the hand
+        """
+        
+        pass
