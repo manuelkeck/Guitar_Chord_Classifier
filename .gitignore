@@ -8,7 +8,6 @@ src/audiostream_handler/__pycache__/
 src/device_handler/__pycache__/
 src/chord_detection/__pycache__/
 src/user_interface/__pycache__/
-data/images/
 data/records/
 resources/
 __pycache__/
