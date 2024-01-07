@@ -67,4 +67,7 @@ astunparse==1.6.3
 pydub==0.25.1
 noisereduce==3.0.0
 pedalboard==0.8.7
-torchvision
+torchvision==0.16.2
+mediapipe; platform_system != "Darwin" or platform.machine != "arm64"
+mediapipe-silicon; platform_system == "Darwin" and platform.machine == "arm64"
+protobuf>=3.11,<4

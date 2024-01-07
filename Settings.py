@@ -16,6 +16,9 @@ OUT_DIR = os.path.join(ROOT_DIR, 'data/')
 RECORDING_DIR = os.path.join(OUT_DIR, 'records/')
 IMAGE_DIR = os.path.join(OUT_DIR, 'images/')
 
+MP_MODEL_PATH = os.path.join(ROOT_DIR, 'models/mediapipe')
+MP_MODEL_TASK = os.path.join(MP_MODEL_PATH, 'hand_landmarker.task')
+
 # WAVE_OUTPUT_FILE = os.path.join(RECORDING_DIR, "recorded.wav")
 # SPECTROGRAM_FILE = os.path.join(RECORDING_DIR, "spectrogram.png")
 
@@ -41,4 +44,14 @@ DURATION = 3
 CHUNK_SIZE = 1024
 
 # Camera configuration
+# 0 = MacBook with iPhone as cam
+# 1 = MacBook inbuilt FaceTime HD cam
+# 2 = Ubuntu Iriun Webcam Software for iPhone as external cam
 CAMERA_INDEX = 1
+
+# Target sizes for cropped images (format 16:9)
+Y_TARGET = 360
+X_TARGET = 640
+
+# Amount of to be captured images for fast-lane implementation
+AMOUNT = 30

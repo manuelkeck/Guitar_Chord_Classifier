@@ -7,8 +7,9 @@ import time
 from src.device_handler.AudioInterface import AudioInterface
 from src.audiostream_handler.AudioStream import AudioStream
 from src.chord_detection.ChordDetector import ChordDetector
-from Settings import CLASSES, DURATION
+from Settings import CLASSES, DURATION, AMOUNT
 from src.TestVisualization import plot_spectogram
+from src.data.ImageHelpers import get_folder, update_index, get_index, save_image
 
 
 class GUIAppController:
@@ -16,10 +17,12 @@ class GUIAppController:
     This class contains all needed functions which are implemented directly with GUI.
     If interactions with GUI will be performed, these functions contain the logic behind.
     """
+
     def __init__(self, gui_app):
         self.gui_app = gui_app
         self.latest_audio_path = ""
         self.latest_image_path = ""
+        self.image_captured = False
         self.start_time = None
         self.recording_thread = None
         self.device, self.index = AudioInterface.find_device()
@@ -48,18 +51,20 @@ class GUIAppController:
             # C-Dur (Downloaded from kaggle)
             # self.latest_audio_path = "data/records/Major_0.wav"
             # Self-recorded C-Dur
-            self.latest_audio_path = "data/records/record-20231223-141242.wav"
+            # self.latest_audio_path = "data/records/record-20231223-141242.wav"
             # Self-recorded D-Dur
-            # self.latest_audio_path = "data/records/record-20231223-141414.wav"
+            self.latest_audio_path = "data/records/record-20231223-141414.wav"
             # Self-recorded G-Dur
             # self.latest_audio_path = "data/records/record-20231223-141521.wav"
             time.sleep(DURATION)
             self.add_text("[Record] Chord will be classified now...")
 
+        return
+
     def perform_chord_detection(self):
         """
-
-        :return:
+        Chord will be detected by CNN. Then, an image will be captured and stored to local
+        file system.
         """
         print("Chord detection function called")
         # Find chord (record = CNN input, chord = CNN output) and capture image
@@ -68,9 +73,7 @@ class GUIAppController:
             print(f"Recorded chord is: {chord}. \nImage will be captured.")
             self.add_text(f"[Record] Recorded chord is: {chord}. \n[Record] Image will be captured.")
             try:
-                self.latest_image_path, name = self.gui_app.camera.capture_image(self.latest_audio_path)
-                print(f"Image stored here: {self.latest_image_path}")
-                self.add_text(f"[Record] Image stored here: ../data/images/{name}.jpg")
+                self.gui_app.camera.capture_image(chord, "")
             except OSError:
                 print("An error occurred: Camera not reachable.")
                 self.add_text("[Record] An error occurred: Camera not reachable.")
@@ -96,7 +99,7 @@ class GUIAppController:
         This is needed, in case that identified chord was wrong or insufficient.
         :return: None
         """
-        if self.latest_audio_path == "" or self.latest_image_path == "":
+        if self.latest_audio_path == "":
             print("Recording audio needed to discard record.")
             self.add_text("[Discard] Record audio first to discard record.")
         else:
@@ -106,14 +109,18 @@ class GUIAppController:
 
             # discard files
             try:
-                # os.remove(self.latest_audio_path)
-                os.remove(self.latest_image_path)
+                os.remove(self.latest_audio_path)
+                if self.latest_image_path != "":
+                    os.remove(self.latest_image_path)
+                else:
+                    print("No image captured. Only audio record will be deleted.")
                 print("Files were deleted.")
                 audio_name = os.path.basename(tmp_audio)
                 image_name = os.path.basename(tmp_image)
                 self.add_text("[Discard] The following files will be discarded:")
                 self.add_text(f"[Discard] {audio_name}")
-                self.add_text(f"[Discard] {image_name}")
+                if self.latest_image_path != "":
+                    self.add_text(f"[Discard] {image_name}")
             except FileNotFoundError:
                 print("Files to delete not found.")
                 self.add_text("[Discard] Files not found.")
@@ -137,3 +144,34 @@ class GUIAppController:
         self.gui_app.textfield.see("end")
         self.gui_app.textfield.config(state="disabled")
         self.gui_app.update()
+
+    def chord_fastlane_dataset(self, chord):
+        """
+        This function will take x=AMOUNT images with 0.12 sec delay between each
+        captured image and stores this to local variable. After that, the queue will
+        be used to call 'save_image' function from file ImageHelpers.py. To avoid
+        time-consuming audio chord detection, the chord will be entered manually
+        in popup textfield.
+        """
+        counter = 0
+        path = get_folder(chord)
+        index = get_index(path)
+
+        while counter < AMOUNT:
+            tmp_index = index + counter
+            tmp_path = os.path.join(path + f"{chord}-{tmp_index}.jpg")
+            image = self.gui_app.camera.capture_image(tmp_path, "fast-lane")
+            # images_period.append(image)
+
+            # Update index in corresponding info.json
+            counter += 1
+            save_image(image, tmp_path)
+            update_index(path, tmp_index + 1)
+
+            print(f"{counter}/{AMOUNT}")
+
+            # Increase timer delay if performance (of system) is not sufficient.
+            # This part is currently hard-coded and bad practice.
+            #time.sleep(0.2)
+
+        self.add_text(f"You have successfully captured {AMOUNT} images from chord {chord}.")
