@@ -53,7 +53,7 @@ class ImageProcessing:
 
             for landmark in hand_landmarks.landmark:
                 x, y = int(landmark.x * w), int(landmark.y * h)
-                cv2.circle(rgb_image, (x, y), 5, (0, 255, 0), -1)  # Grün, Radius 5
+                cv2.circle(rgb_image, (x, y), 5, (0, 255, 0), -1)
                 min_x = min(min_x, x)
                 max_x = max(max_x, x)
                 min_y = min(min_y, y)
@@ -78,7 +78,7 @@ class ImageProcessing:
             rgb_image = hand_image
 
             # Save image to local file system
-            # self.controller.add_text(f"[Image] Cropped image will be saved here: {image_path}")
+            self.controller.add_text(f"[Image] Cropped image will be saved here: {image_path}")
             self.controller.latest_image_path = image_path
             cv2.imwrite(image_path, rgb_image)
             print(f"Image stored here: {image_path}")
