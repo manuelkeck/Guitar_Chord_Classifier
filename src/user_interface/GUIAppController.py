@@ -9,8 +9,7 @@ from src.audiostream_handler.AudioStream import AudioStream
 from src.chord_detection.ChordDetector import ChordDetector
 from Settings import CLASSES, DURATION, AMOUNT
 from src.TestVisualization import plot_spectogram
-from datetime import datetime
-from src.data.ImageHelpers import get_folder, update_index, get_index, capture_image
+from src.data.ImageHelpers import get_folder, update_index, get_index, save_image
 
 
 class GUIAppController:
@@ -18,6 +17,7 @@ class GUIAppController:
     This class contains all needed functions which are implemented directly with GUI.
     If interactions with GUI will be performed, these functions contain the logic behind.
     """
+
     def __init__(self, gui_app):
         self.gui_app = gui_app
         self.latest_audio_path = ""
@@ -72,7 +72,7 @@ class GUIAppController:
             self.add_text(f"[Record] Recorded chord is: {chord}. \n[Record] Image will be captured.")
             try:
                 # self.latest_image_path, name = self.gui_app.camera.capture_image(self.latest_audio_path)
-                self.gui_app.camera.capture_image(chord, self.latest_audio_path, "")
+                _ = self.gui_app.camera.capture_image(chord, self.latest_audio_path, "")
                 # print(f"Image stored here: {self.latest_image_path}")
                 # self.add_text(f"[Record] Image stored here: ../data/images/{name}.jpg")
             except OSError:
@@ -149,27 +149,30 @@ class GUIAppController:
     def chord_fastlane_dataset(self, chord):
         """
         This function will take x=AMOUNT images with 0.12 sec delay between each
-        captured image and stores this to local file system. To avoid
-        time-consuming audio chord detection, the chord will be entered
-        manually in popup textfield.
+        captured image and stores this to local variable. After that, the queue will
+        be used to call 'save_image' function from file ImageHelpers.py. To avoid
+        time-consuming audio chord detection, the chord will be entered manually
+        in popup textfield.
         """
         counter = 0
         path = get_folder(chord)
         index = get_index(path)
 
-        print(f"Type of index: {type(index)}")
-
         while counter < AMOUNT:
-            tmp_path = os.path.join(path + f"{chord}-{index}.jpg")
-            if self.gui_app.camera.capture_image(chord, tmp_path, "fast-lane"):
-                counter += 1
-                index += 1
-                print(f"{counter}/{AMOUNT}")
-                self.add_text(f"Images captured: {counter}/{AMOUNT}")
-            # Increase timer delay if performance is not sufficient
-            time.sleep(0.5)
+            tmp_index = index + counter
+            tmp_path = os.path.join(path + f"{chord}-{tmp_index}.jpg")
+            image = self.gui_app.camera.capture_image(tmp_path, "fast-lane")
+            # images_period.append(image)
 
-        # Update index in corresponding info.json
-        update_index(path, index)
+            # Update index in corresponding info.json
+            counter += 1
+            save_image(image, tmp_path)
+            update_index(path, tmp_index + 1)
+
+            print(f"{counter}/{AMOUNT}")
+
+            # Increase timer delay if performance (of system) is not sufficient.
+            # This part is currently hard-coded and bad practice.
+            #time.sleep(0.2)
 
         self.add_text(f"You have successfully captured {AMOUNT} images from chord {chord}.")

@@ -10,7 +10,7 @@ import json
 from Settings import X_TARGET, Y_TARGET, OUT_DIR, IMAGE_DIR
 
 
-def capture_image(image: np.ndarray, image_path: str):
+def save_image(image: np.ndarray, image_path: str):
     """
     This function implements a light-weighted option to capture images with the hand
     on fingerboard. There is no hand detection etc. implemented.
@@ -26,7 +26,6 @@ def get_folder(chord: str):
 def get_index(path: str):
     try:
         file = os.path.join(path + "info.json")
-        print(f"File: {file}")
         with open(file, "r") as json_file:
             info_json = json.load(json_file)
 

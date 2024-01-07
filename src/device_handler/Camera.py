@@ -7,7 +7,6 @@ import time
 
 from Settings import IMAGE_DIR, CAMERA_INDEX
 from src.data.Image import ImageProcessing
-from src.data.ImageHelpers import capture_image, get_folder, get_index
 
 
 class Camera:
@@ -57,7 +56,7 @@ class Camera:
         else:
             return None
 
-    def capture_image(self, chord: str, recorded_audio_path, flag: str):
+    def capture_image(self, recorded_audio_path, flag: str):
         """
         This function is called after a chord was classified. An image will be
         captured and same name like corresponding audio file (with
@@ -65,7 +64,6 @@ class Camera:
         to capture one single frame from camera stream.
         The captured frame will be processed in Image class to get a cropped image
         based on recognized hand. This image will be stored to local file system.
-        :param chord: Chord, which will be captured
         :param recorded_audio_path: Path to previously recorded audio file
         :param flag: Will be used to determine caller function (needed for fast-lane
         implementation)
@@ -73,9 +71,6 @@ class Camera:
         """
         frame = self.get_frame()
         counter = 0
-        check_var = False
-
-        print("Capturing image...")
 
         # To avoid OpenCV rowBytes == 0 error
         while frame is None and counter < 3:
@@ -86,19 +81,21 @@ class Camera:
         if frame is None:
             raise Exception("Error while loading image from stream.")
         else:
-            # Get name from recorded audio and remove .wav extension to store image with same name
-            image_name, extension = os.path.splitext(os.path.basename(recorded_audio_path))
-            file_extension = ".jpg"
-
-            # Create path with file name to save image locally
-            image_path = os.path.join(IMAGE_DIR, f"{image_name}{file_extension}")
-
-            # Send image to crop function
+            # Return image as numpy array
             if flag == "fast-lane":
                 # ImageProcessing.crop_captured_image_by_bounding_box(self.image_processing, frame, image_path)
-                capture_image(frame, recorded_audio_path)
-                check_var = True
-            else:
-                check_var = ImageProcessing.crop_captured_image_by_landmarks(self.image_processing, frame, image_path)
+                # frame_array = save_image(frame, recorded_audio_path)
+                return frame
 
-        return check_var
+            # Send image to crop function
+            else:
+                # Get name from recorded audio and remove .wav extension to store image with same name
+                image_name, extension = os.path.splitext(os.path.basename(recorded_audio_path))
+                file_extension = ".jpg"
+
+                # Create path with file name to save image locally
+                image_path = os.path.join(IMAGE_DIR, f"{image_name}{file_extension}")
+
+                ImageProcessing.crop_captured_image_by_landmarks(self.image_processing, frame, image_path)
+
+        return None

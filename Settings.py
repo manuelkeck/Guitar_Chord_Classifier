@@ -54,4 +54,4 @@ Y_TARGET = 360
 X_TARGET = 640
 
 # Amount of to be captured images for fast-lane implementation
-AMOUNT = 25
+AMOUNT = 30

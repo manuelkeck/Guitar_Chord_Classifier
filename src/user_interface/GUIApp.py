@@ -125,6 +125,7 @@ class GUIApp(tk.Tk):
         cancel_button.pack(side=tk.LEFT, padx=(20, 10), pady=10)
 
     def on_confirm(self, user_input, popup):
+        self.record_button["state"] = "disable"
         self.create_button["state"] = "disable"
         print("User input:", user_input)
         popup.destroy()
@@ -140,6 +141,7 @@ class GUIApp(tk.Tk):
 
     def start_recording(self):
         self.record_button["state"] = "disable"
+        self.create_button["state"] = "disable"
         _thread.start_new_thread(self.main_task, (DURATION, ""))
         _thread.start_new_thread(self.record_audio, ())
 
@@ -148,9 +150,16 @@ class GUIApp(tk.Tk):
         Contains progressbar and further processing of logic after recording is done
         """
         print(f"Task 1: GUI with progress bar. Thread-ID: {_thread.get_ident()}")
-        for i in range(duration * 10):
-            time.sleep(0.1)
-            self.progressbar["value"] = (i + 1) / (duration * 10) * 100
+        multiplier = 10
+        time_count = 0.1
+        time.sleep(1)
+        if flag == "fast-lane":
+            duration = AMOUNT
+            multiplier = 1
+            time_count = 0
+        for i in range(duration * multiplier):
+            time.sleep(time_count)
+            self.progressbar["value"] = (i + 1) / (duration * multiplier) * 100
             self.update_idletasks()
 
         print("Both tasks completed.")
