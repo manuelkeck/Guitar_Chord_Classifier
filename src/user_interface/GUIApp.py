@@ -1,6 +1,7 @@
 """
 Author: Manuel Keck
 """
+import threading
 import tkinter as tk
 import time
 import _thread
@@ -160,7 +161,6 @@ class GUIApp(tk.Tk):
                 self.update_idletasks()
 
             # Will be started after x=DURATION time, with a one-second delay
-            time.sleep(1)
             self.controller.perform_chord_detection()
         else:
             print("Fast-lane dataset creation selected. Progressbar will not be updated. Check logs in terminal.")

@@ -51,9 +51,9 @@ class GUIAppController:
             # C-Dur (Downloaded from kaggle)
             # self.latest_audio_path = "data/records/Major_0.wav"
             # Self-recorded C-Dur
-            # self.latest_audio_path = "data/records/record-20231223-141242.wav"
+            self.latest_audio_path = "data/records/record-20231223-141242.wav"
             # Self-recorded D-Dur
-            self.latest_audio_path = "data/records/record-20231223-141414.wav"
+            # self.latest_audio_path = "data/records/record-20231223-141414.wav"
             # Self-recorded G-Dur
             # self.latest_audio_path = "data/records/record-20231223-141521.wav"
             time.sleep(DURATION)
@@ -71,7 +71,7 @@ class GUIAppController:
         chord = self.cd.classify_chord(self.latest_audio_path)
         if chord in CLASSES:
             print(f"Recorded chord is: {chord}. \nImage will be captured.")
-            self.add_text(f"[Record] Recorded chord is: {chord}. \n[Record] Image will be captured.")
+            # self.add_text(f"[Record] Recorded chord is: {chord}. \n[Record] Image will be captured.")
             try:
                 self.gui_app.camera.capture_image(chord, "")
             except OSError:
@@ -143,7 +143,7 @@ class GUIAppController:
         self.gui_app.textfield.insert("end", f"{text}\n")
         self.gui_app.textfield.see("end")
         self.gui_app.textfield.config(state="disabled")
-        self.gui_app.update()
+        self.gui_app.update_idletasks()
 
     def chord_fastlane_dataset(self, chord):
         """

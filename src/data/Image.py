@@ -78,7 +78,7 @@ class ImageProcessing:
             rgb_image = hand_image
 
             # Save image to local file system
-            self.controller.add_text(f"[Image] Cropped image will be saved here: {image_path}")
+            # self.controller.add_text(f"[Image] Cropped image will be saved here: {image_path}")
             self.controller.latest_image_path = image_path
             cv2.imwrite(image_path, rgb_image)
             print(f"Image stored here: {image_path}")
