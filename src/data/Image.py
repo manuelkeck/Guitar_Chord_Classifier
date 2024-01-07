@@ -41,7 +41,7 @@ class ImageProcessing:
 
         if results.multi_hand_landmarks:
             print("Landmarks found.")
-            self.controller.add_text("[Image]: Landmarks found.")
+            self.controller.add_text("[Image] Landmarks found.")
 
             # Condition: only one hand visible in image
             hand_landmarks = results.multi_hand_landmarks[0]
