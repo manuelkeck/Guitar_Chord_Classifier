@@ -71,7 +71,7 @@ class GUIAppController:
         chord = self.cd.classify_chord(self.latest_audio_path)
         if chord in CLASSES:
             print(f"Recorded chord is: {chord}. \nImage will be captured.")
-            # self.add_text(f"[Record] Recorded chord is: {chord}. \n[Record] Image will be captured.")
+            self.add_text(f"[Record] Recorded chord is: {chord}. \n[Record] Image will be captured.")
             try:
                 self.gui_app.camera.capture_image(chord, "")
             except OSError:
