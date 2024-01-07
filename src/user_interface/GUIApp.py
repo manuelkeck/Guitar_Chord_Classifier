@@ -150,22 +150,20 @@ class GUIApp(tk.Tk):
         Contains progressbar and further processing of logic after recording is done
         """
         print(f"Task 1: GUI with progress bar. Thread-ID: {_thread.get_ident()}")
-        multiplier = 10
-        time_count = 0.1
-        time.sleep(1)
-        if flag == "fast-lane":
-            duration = AMOUNT
-            multiplier = 1
-            time_count = 0
-        for i in range(duration * multiplier):
-            time.sleep(time_count)
-            self.progressbar["value"] = (i + 1) / (duration * multiplier) * 100
-            self.update_idletasks()
 
-        print("Both tasks completed.")
+        time.sleep(0.5)
 
         if flag != "fast-lane":
+            for i in range(duration * 10):
+                time.sleep(0.1)
+                self.progressbar["value"] = (i + 1) / (duration * 10) * 100
+                self.update_idletasks()
+
+            # Will be started after x=DURATION time, with a one-second delay
+            time.sleep(1)
             self.controller.perform_chord_detection()
+        else:
+            print("Fast-lane dataset creation selected. Progressbar will not be updated. Check logs in terminal.")
 
         self.record_button["state"] = "normal"
         self.create_button["state"] = "normal"

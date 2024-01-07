@@ -7,6 +7,7 @@ import time
 
 from Settings import IMAGE_DIR, CAMERA_INDEX
 from src.data.Image import ImageProcessing
+from src.data.ImageHelpers import get_index, get_folder, update_index
 
 
 class Camera:
@@ -56,7 +57,7 @@ class Camera:
         else:
             return None
 
-    def capture_image(self, recorded_audio_path, flag: str):
+    def capture_image(self, chord, flag: str):
         """
         This function is called after a chord was classified. An image will be
         captured and same name like corresponding audio file (with
@@ -64,6 +65,7 @@ class Camera:
         to capture one single frame from camera stream.
         The captured frame will be processed in Image class to get a cropped image
         based on recognized hand. This image will be stored to local file system.
+        :param chord: Chord which was identified. Needed for image path
         :param recorded_audio_path: Path to previously recorded audio file
         :param flag: Will be used to determine caller function (needed for fast-lane
         implementation)
@@ -71,6 +73,9 @@ class Camera:
         """
         frame = self.get_frame()
         counter = 0
+        path = get_folder(chord)
+        index = get_index(path)
+        tmp_path = os.path.join(path + f"{chord}-{index}.jpg")
 
         # To avoid OpenCV rowBytes == 0 error
         while frame is None and counter < 3:
@@ -89,13 +94,8 @@ class Camera:
 
             # Send image to crop function
             else:
-                # Get name from recorded audio and remove .wav extension to store image with same name
-                image_name, extension = os.path.splitext(os.path.basename(recorded_audio_path))
-                file_extension = ".jpg"
+                if ImageProcessing.crop_captured_image_by_landmarks(self.image_processing, frame, tmp_path):
+                    print(f"Index in folder for chord {chord} will be updated.")
+                    update_index(path, index+1)
 
-                # Create path with file name to save image locally
-                image_path = os.path.join(IMAGE_DIR, f"{image_name}{file_extension}")
-
-                ImageProcessing.crop_captured_image_by_landmarks(self.image_processing, frame, image_path)
-
-        return None
+        return

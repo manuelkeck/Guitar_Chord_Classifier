@@ -84,8 +84,9 @@ class ImageProcessing:
             print(f"Image stored here: {image_path}")
             check_var = True
         else:
-            print("No landmarks found.")
+            print("No landmarks found. Image will not be saved")
             self.controller.add_text("[Image] No landmarks found!")
+            self.controller.add_text("[Image] Image will not be saved.")
             check_var = False
 
         self.controller.add_text("[Image] Check captured image presented on left side.")

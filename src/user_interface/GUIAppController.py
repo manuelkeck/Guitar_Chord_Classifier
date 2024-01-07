@@ -59,6 +59,8 @@ class GUIAppController:
             time.sleep(DURATION)
             self.add_text("[Record] Chord will be classified now...")
 
+        return
+
     def perform_chord_detection(self):
         """
         Chord will be detected by CNN. Then, an image will be captured and stored to local
@@ -72,7 +74,7 @@ class GUIAppController:
             self.add_text(f"[Record] Recorded chord is: {chord}. \n[Record] Image will be captured.")
             try:
                 # self.latest_image_path, name = self.gui_app.camera.capture_image(self.latest_audio_path)
-                _ = self.gui_app.camera.capture_image(chord, self.latest_audio_path, "")
+                self.gui_app.camera.capture_image(chord, "")
                 # print(f"Image stored here: {self.latest_image_path}")
                 # self.add_text(f"[Record] Image stored here: ../data/images/{name}.jpg")
             except OSError:
