@@ -66,7 +66,7 @@ in root directory of this project. Start with `python main.py` in branch directo
 be opened.
 
 The GUI will look like this:
-![Image](/Users/manuel/Desktop/Guitar_Chord_Classifier/resources/GUI_Part1.png)
+![Image](resources/GUI_Part1.png)
 In this screenshot you can see the camera preview to check the image that will be captured.
 After the chord was predicted successfully, an image will be captured and hand landmarks will be drawn
 on it. Based on the landmarks the image will be cropped and presented to check if it is correct.
