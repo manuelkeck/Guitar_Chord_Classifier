@@ -73,10 +73,7 @@ class GUIAppController:
             print(f"Recorded chord is: {chord}. \nImage will be captured.")
             self.add_text(f"[Record] Recorded chord is: {chord}. \n[Record] Image will be captured.")
             try:
-                # self.latest_image_path, name = self.gui_app.camera.capture_image(self.latest_audio_path)
                 self.gui_app.camera.capture_image(chord, "")
-                # print(f"Image stored here: {self.latest_image_path}")
-                # self.add_text(f"[Record] Image stored here: ../data/images/{name}.jpg")
             except OSError:
                 print("An error occurred: Camera not reachable.")
                 self.add_text("[Record] An error occurred: Camera not reachable.")

@@ -137,7 +137,7 @@ class GUIApp(tk.Tk):
             _thread.start_new_thread(self.controller.chord_fastlane_dataset, (user_input,))
         else:
             self.controller.add_text("Please enter one of the following chords: "
-                                     "A, Am, Bm, C, D, Dm, E, Em, F, G")
+                                     "A, Am, Bm, C, D, Dm, E, Em, F, G or 'None'.")
 
     def start_recording(self):
         self.record_button["state"] = "disable"

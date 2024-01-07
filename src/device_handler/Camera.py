@@ -5,7 +5,7 @@ import cv2
 import os
 import time
 
-from Settings import IMAGE_DIR, CAMERA_INDEX
+from Settings import CAMERA_INDEX
 from src.data.Image import ImageProcessing
 from src.data.ImageHelpers import get_index, get_folder, update_index
 
@@ -19,7 +19,6 @@ class Camera:
         """
         The selected camera will be initialized. A live stream from camera image will be prepared with self.cap.
         The width and height parameters are needed values for GUI.
-        :param camera_index: index of camera. macOS camera_index = 1, ubuntu camera_index = -1
         """
         self.camera_index = CAMERA_INDEX
         self.cap = cv2.VideoCapture(self.camera_index)
@@ -66,7 +65,6 @@ class Camera:
         The captured frame will be processed in Image class to get a cropped image
         based on recognized hand. This image will be stored to local file system.
         :param chord: Chord which was identified. Needed for image path
-        :param recorded_audio_path: Path to previously recorded audio file
         :param flag: Will be used to determine caller function (needed for fast-lane
         implementation)
         :return: Path to captured image
@@ -88,14 +86,13 @@ class Camera:
         else:
             # Return image as numpy array
             if flag == "fast-lane":
-                # ImageProcessing.crop_captured_image_by_bounding_box(self.image_processing, frame, image_path)
-                # frame_array = save_image(frame, recorded_audio_path)
                 return frame
 
             # Send image to crop function
             else:
                 if ImageProcessing.crop_captured_image_by_landmarks(self.image_processing, frame, tmp_path):
                     print(f"Index in folder for chord {chord} will be updated.")
+                    self.controller.add_text(f"[Image] Index in folder for chord {chord} will be updated to {index}.")
                     update_index(path, index+1)
 
         return

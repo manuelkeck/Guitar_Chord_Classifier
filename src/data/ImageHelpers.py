@@ -7,7 +7,7 @@ import numpy as np
 import os
 import json
 
-from Settings import X_TARGET, Y_TARGET, OUT_DIR, IMAGE_DIR
+from Settings import X_TARGET, Y_TARGET, IMAGE_DIR
 
 
 def save_image(image: np.ndarray, image_path: str):
@@ -46,9 +46,6 @@ def update_index(path: str, index=0):
         with open(file, "w") as json_file:
             json.dump(info_json, json_file)
     except FileNotFoundError:
-        print("An error occurred in 'update_index'.")
-        return
-    except FileExistsError:
         print("An error occurred in 'update_index'.")
         return
 
