@@ -1,7 +1,5 @@
 src/__pycache__/
-.venv/*
-gcdenv/*
-virtualenv3-11/*
+venv/*
 .DS_Store
 .idea/
 src/audiostream_handler/__pycache__/
@@ -9,6 +7,5 @@ src/device_handler/__pycache__/
 src/chord_detection/__pycache__/
 src/user_interface/__pycache__/
 data/records/
-# data/images/
-resources/
+data/images/
 __pycache__/
