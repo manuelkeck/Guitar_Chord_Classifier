@@ -90,7 +90,7 @@ class Camera:
 
             # Send image to crop function
             else:
-                if ImageProcessing.crop_captured_image_by_landmarks(self.image_processing, frame, tmp_path):
+                if ImageProcessing.get_hand_landmarks(self.image_processing, frame, tmp_path):
                     print(f"Index in folder for chord {chord} will be updated.")
                     self.controller.add_text(f"[Image] Index in folder for chord {chord} will be updated to {index}.")
                     update_index(path, index+1)
