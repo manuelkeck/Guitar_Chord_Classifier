@@ -14,9 +14,6 @@ def main():
     app.protocol("WM_DELETE_WINDOW", GUIApp.on_closing)
     app.mainloop()
 
-    # split_dataset()
-    get_amount_of_images()
-
 
 if __name__ == '__main__':
     main()
