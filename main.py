@@ -10,9 +10,9 @@ def main():
     Main method to start guitar chord detector with tkinter GUI
     :return: None
     """
-    # app = GUIApp()
-    # app.protocol("WM_DELETE_WINDOW", GUIApp.on_closing)
-    # app.mainloop()
+    app = GUIApp()
+    app.protocol("WM_DELETE_WINDOW", GUIApp.on_closing)
+    app.mainloop()
 
     # split_dataset()
     get_amount_of_images()
