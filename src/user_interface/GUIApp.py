@@ -93,6 +93,8 @@ class GUIApp(tk.Tk):
         self.record_button.pack(padx=5, anchor="e", side="right")
         self.create_button = ttk.Button(self.recording_frame, text="Create", command=self.open_popup)
         self.create_button.pack(padx=5, anchor="e", side="right")
+        self.chord_classifier_button = ttk.Button(self.recording_frame, text="Chord Classifier", command=self.toggle_view)
+        self.chord_classifier_button.pack(padx=5, anchor="e", side="left")
 
         self.bottom_frame.pack_propagate(False)
         self.bottom_frame.pack_propagate(True)
@@ -221,3 +223,37 @@ class GUIApp(tk.Tk):
     def on_closing(self):
         self.camera.release()
         self.destroy()
+
+    def toggle_view(self):
+        if self.chord_classifier_button.cget("text") == "Chord Classifier":
+            # Hide elements
+            self.right_frame.pack_forget()
+            self.landmark_image.pack_forget()
+
+            # Disable buttons
+            self.record_button["state"] = "disable"
+            self.create_button["state"] = "disable"
+
+            # Resize camera preview
+            self.left_frame.pack_propagate(True)
+            self.video_label.config(width=self.video_label.winfo_width() * 2, height=self.video_label.winfo_height() * 2)
+
+            self.chord_classifier_button.config(text="Recording Tool")
+
+        else:
+            # Show elements
+            self.right_frame.pack(side="left", fill="both", expand=True)
+            self.landmark_image.pack(pady=10, anchor="s")
+
+            # Enable buttons
+            self.record_button["state"] = "normal"
+            self.create_button["state"] = "normal"
+
+            self.left_frame.pack_propagate(False)
+            self.video_label.config(width=348, height=194)
+
+            self.chord_classifier_button.config(text="Chord Classifier")
+
+            # Repack left frame
+            self.left_frame.config(width=400, height=300)
+            self.left_frame.pack(side="left", fill="both", expand=True)
