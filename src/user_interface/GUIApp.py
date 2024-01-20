@@ -1,7 +1,6 @@
 """
 Author: Manuel Keck
 """
-import threading
 import tkinter as tk
 import time
 import _thread
@@ -22,7 +21,6 @@ hands = mp_hands.Hands(
     max_num_hands=2,
     min_detection_confidence=0.5,
     min_tracking_confidence=0.5)
-
 mp_drawing = mp.solutions.drawing_utils
 
 
@@ -221,7 +219,7 @@ class GUIApp(tk.Tk):
         if self.chord_classifier_button.cget("text") == "Chord Classifier":
             frame = self.camera.get_frame()
             if frame is not None:
-                # frame = cv2.flip(frame, 1)
+                frame = cv2.flip(frame, 1)
                 img = Image.fromarray(frame)
                 img = img.resize((self.recalculated_width, self.recalculated_height), Image.LANCZOS)
                 img = ImageOps.pad(img, (
