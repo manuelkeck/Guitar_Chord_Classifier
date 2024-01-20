@@ -5,6 +5,8 @@ import threading
 import tkinter as tk
 import time
 import _thread
+import cv2
+import mediapipe as mp
 
 from tkinter import ttk
 from screeninfo import get_monitors
@@ -12,6 +14,16 @@ from src.user_interface.GUIAppController import GUIAppController
 from src.device_handler.Camera import Camera
 from PIL import Image, ImageTk, ImageOps
 from Settings import DURATION, CLASSES, AMOUNT
+
+# Init mediapipe hands
+mp_hands = mp.solutions.hands
+hands = mp_hands.Hands(
+    static_image_mode=False,
+    max_num_hands=2,
+    min_detection_confidence=0.5,
+    min_tracking_confidence=0.5)
+
+mp_drawing = mp.solutions.drawing_utils
 
 
 class GUIApp(tk.Tk):
@@ -93,6 +105,8 @@ class GUIApp(tk.Tk):
         self.record_button.pack(padx=5, anchor="e", side="right")
         self.create_button = ttk.Button(self.recording_frame, text="Create", command=self.open_popup)
         self.create_button.pack(padx=5, anchor="e", side="right")
+        self.chord_classifier_button = ttk.Button(self.recording_frame, text="Chord Classifier", command=self.toggle_view)
+        self.chord_classifier_button.pack(padx=5, anchor="e", side="left")
 
         self.bottom_frame.pack_propagate(False)
         self.bottom_frame.pack_propagate(True)
@@ -204,20 +218,80 @@ class GUIApp(tk.Tk):
         self.recalculated_width, self.recalculated_height = self.aspect_ratio()
 
     def update_camera(self):
-        frame = self.camera.get_frame()
-        if frame is not None:
-            # frame = cv2.flip(frame, 1)
-            img = Image.fromarray(frame)
-            img = img.resize((self.recalculated_width, self.recalculated_height), Image.LANCZOS)
-            img = ImageOps.pad(img, (
-                self.video_label.winfo_width(),
-                self.video_label.winfo_height()
-            ), color='black')
-            img = ImageTk.PhotoImage(img)
-            self.video_label.configure(image=img)
-            self.video_label.image = img
-        self.after(10, self.update_camera)
+        if self.chord_classifier_button.cget("text") == "Chord Classifier":
+            frame = self.camera.get_frame()
+            if frame is not None:
+                # frame = cv2.flip(frame, 1)
+                img = Image.fromarray(frame)
+                img = img.resize((self.recalculated_width, self.recalculated_height), Image.LANCZOS)
+                img = ImageOps.pad(img, (
+                    self.video_label.winfo_width(),
+                    self.video_label.winfo_height()
+                ), color='black')
+                img = ImageTk.PhotoImage(img)
+                self.video_label.configure(image=img)
+                self.video_label.image = img
+            self.after(10, self.update_camera)
+        else:
+            frame = self.camera.get_frame()
+            if frame is not None:
+                image = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
+                image.flags.writeable = False
+                results = hands.process(image)
+
+                # Draw the hand annotations on the image
+                image.flags.writeable = True
+                image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+                if results.multi_hand_landmarks:
+                    for hand_landmarks in results.multi_hand_landmarks:
+                        mp_drawing.draw_landmarks(
+                            image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+
+                img = Image.fromarray(image)
+                img = img.resize((self.recalculated_width, self.recalculated_height), Image.LANCZOS)
+                img = ImageOps.pad(img, (
+                    self.video_label.winfo_width(),
+                    self.video_label.winfo_height()
+                ), color='black')
+                img = ImageTk.PhotoImage(image=img)
+                self.video_label.configure(image=img)
+                self.video_label.image = img
+            self.after(10, self.update_camera)
 
     def on_closing(self):
         self.camera.release()
         self.destroy()
+
+    def toggle_view(self):
+        if self.chord_classifier_button.cget("text") == "Chord Classifier":
+            # Hide elements
+            self.right_frame.pack_forget()
+            self.landmark_image.pack_forget()
+
+            # Disable buttons
+            self.record_button["state"] = "disable"
+            self.create_button["state"] = "disable"
+
+            # Resize camera preview
+            self.left_frame.pack_propagate(True)
+            self.video_label.config(width=self.video_label.winfo_width() * 2, height=self.video_label.winfo_height() * 2)
+
+            self.chord_classifier_button.config(text="Recording Tool")
+
+        else:
+            # Show elements
+            self.right_frame.pack(side="left", fill="both", expand=True)
+            self.landmark_image.pack(pady=10, anchor="s")
+
+            # Enable buttons
+            self.record_button["state"] = "normal"
+            self.create_button["state"] = "normal"
+
+            self.left_frame.pack_propagate(False)
+            self.video_label.config(width=348, height=194)
+
+            self.chord_classifier_button.config(text="Chord Classifier")
+
+            # Repack left frame
+            self.left_frame.config(width=400, height=300)
+            self.left_frame.pack(side="left", fill="both", expand=True)
