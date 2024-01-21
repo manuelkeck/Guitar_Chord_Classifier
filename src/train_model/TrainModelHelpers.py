@@ -6,6 +6,8 @@ to get an own trained model.
 import os
 import random
 import shutil
+import cv2
+import numpy as np
 
 from Settings import IMAGE_DIR
 from src.data.ImageHelpers import get_index
@@ -14,14 +16,48 @@ from src.data.ImageHelpers import get_index
 amount_of_images = 0
 
 
-def crop_images():
-    # Crop images if needed
-    pass
+def resize_image(image):
+    """
+    This function returns a single image resized to 224x224 and
+    with black paddings on top and bottom to avoid distorting
+    original image.
+    param: return: Squared image with 16:9 original image and black boarders
+    """
+    input_shape = [224, 224, 3]
 
+    # Scaling factors
+    scale_x = input_shape[0] / image.shape[1]
+    scale_y = input_shape[1] / image.shape[0]
 
-def get_model():
-    # Return google net model
-    pass
+    scale_factor = min(scale_x, scale_y)
+
+    new_width = int(image.shape[1] * scale_factor)
+    new_height = int(image.shape[0] * scale_factor)
+
+    # Scale image
+    resized_image = cv2.resize(
+        image,
+        (new_width, new_height),
+        interpolation=cv2.INTER_AREA
+    )
+
+    # This is to create black boarders because 16:9 image will be resized to 1:1
+    padded_image = np.zeros((input_shape[0], input_shape[1], input_shape[2]), dtype=np.uint8)
+
+    # Center image within black squared image (where image will be copied in
+    x_offset = (padded_image.shape[1] - resized_image.shape[1]) // 2
+    y_offset = (padded_image.shape[0] - resized_image.shape[0]) // 2
+
+    # Copy image in padded_image
+    padded_image[y_offset:y_offset + resized_image.shape[0],
+    x_offset:x_offset + resized_image.shape[1]] = resized_image
+
+    # img = cv2.imread(padded_image, 0)
+    # print(f"Size of image: {padded_image.shape}")
+    # plt.imshow(padded_image)
+    # plt.show()
+
+    return padded_image
 
 
 def split_dataset():
