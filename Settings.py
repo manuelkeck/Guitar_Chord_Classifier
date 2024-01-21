@@ -16,8 +16,7 @@ OUT_DIR = os.path.join(ROOT_DIR, 'data/')
 RECORDING_DIR = os.path.join(OUT_DIR, 'records/')
 IMAGE_DIR = os.path.join(OUT_DIR, 'images/')
 
-MP_MODEL_PATH = os.path.join(ROOT_DIR, 'models/mediapipe')
-MP_MODEL_TASK = os.path.join(MP_MODEL_PATH, 'hand_landmarker.task')
+MODEL_PATH = os.path.join(ROOT_DIR, 'models/chord_video_detector')
 
 # WAVE_OUTPUT_FILE = os.path.join(RECORDING_DIR, "recorded.wav")
 # SPECTROGRAM_FILE = os.path.join(RECORDING_DIR, "spectrogram.png")

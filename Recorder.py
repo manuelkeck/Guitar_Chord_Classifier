@@ -2,7 +2,6 @@
 Author: Manuel Keck
 """
 from src.user_interface.GUIApp import GUIApp
-from src.data.Image import Image
 
 
 def main():
