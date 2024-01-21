@@ -4,11 +4,10 @@ https://www.tensorflow.org/api_docs/python/tf/keras/utils/Sequence
 """
 import os
 import numpy as np
-import cv2
 
 from matplotlib import pyplot as plt
 from tensorflow import keras as keras
-from typing import Optional, Callable, List
+from typing import Optional, Callable, List, Tuple
 from Settings import CLASSES_MAP
 
 from src.train_model.TrainModelHelpers import get_sub_folders
@@ -18,17 +17,16 @@ from src.train_model.Sample import Sample
 class Dataset(keras.utils.Sequence):
     def __init__(self, image_path: str, batch_size: int = 32, shuffle=True, input_shape=(224, 224, 3),
                  augmentation: bool = False, preprocessing: Optional[Callable] = None):
+
         self.image_path = image_path  # ROOT_DIR/data/images/training/
         self.batch_size = batch_size
-        # self.augmenter = Optional[]
         self.shuffle = shuffle
         self.input_shape = input_shape
-        self.data_samples: List[Sample] = []
 
+        self.data_samples: List[Sample] = []
         self.load_data()
 
         self.indexes = np.arange(len(self.data_samples))
-
         self.on_epoch_end()
 
     def load_data(self):
@@ -89,12 +87,12 @@ class Dataset(keras.utils.Sequence):
 
         for index in indexes:
             # Todo: call method for augmentation and preprocessing if needed
-            # Why to floatisize the image?
-            float_image = (self.data_samples[index].image / 255).astype(np.float32)
-            input_images.append(float_image)
+            tmp_img = self.data_samples[index].image
+            tmp_img = (tmp_img/255).astype(np.float32)
+            input_images.append(tmp_img)
             labels.append(self.data_samples[index].label)
 
-        return input_images, labels
+        return np.array(input_images), np.array(labels)
 
     @staticmethod
     def generate_label(label: str) -> np.array:
@@ -109,6 +107,10 @@ class Dataset(keras.utils.Sequence):
             labels[10] = 1
 
         return np.array(labels)
+
+    def generate_sample(self, index : int) -> Tuple[np.ndarray, np.ndarray]:
+        # input_img, label =
+        pass
 
     def on_epoch_end(self):
         self.indexes = np.arange(len(self.data_samples))
