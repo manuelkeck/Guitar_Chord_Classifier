@@ -70,6 +70,8 @@ def split_dataset():
 
     folder_sub_folder = get_sub_folders(folder)
 
+    pass
+
     # Testing dataset
     for sub_folder in folder_sub_folder:
         # e.g. ../images/testing/A
@@ -174,7 +176,7 @@ def remove_images(folders: list, source_dir: str, root_dir: str):
 
 
 def is_split():
-    path = f"{IMAGE_DIR}testing/A"
+    path = f"{IMAGE_DIR}testing/Bm"
     path_elements = os.listdir(path)
     if len(path_elements) == 0:
         return False

@@ -7,6 +7,5 @@ src/device_handler/__pycache__/
 src/chord_detection/__pycache__/
 src/user_interface/__pycache__/
 data/records/
-data/images/
 __pycache__/
 output/

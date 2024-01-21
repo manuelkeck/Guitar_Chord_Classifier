@@ -13,6 +13,7 @@ def main():
     else:
         print("Data was not split.")
     print("Splitting data...")
+    # undo_split()
     split_dataset()
     get_amount_of_images()
 
