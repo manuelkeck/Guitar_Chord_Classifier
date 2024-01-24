@@ -15,13 +15,14 @@ from src.train_model.Sample import Sample
 
 
 class Dataset(keras.utils.Sequence):
-    def __init__(self, image_path: str, batch_size: int = 32, shuffle=True, input_shape=(224, 224, 3),
+    def __init__(self, image_path: str, batch_size: int = 64, shuffle=True, input_shape=(224, 224, 3),
                  augmentation: bool = False, preprocessing: Optional[Callable] = None):
 
         self.image_path = image_path  # ROOT_DIR/data/images/training/
         self.batch_size = batch_size
         self.shuffle = shuffle
         self.input_shape = input_shape
+        self.image_files = []
 
         self.data_samples: List[Sample] = []
         self.load_data()
@@ -36,17 +37,18 @@ class Dataset(keras.utils.Sequence):
         sub_folders = get_sub_folders(self.image_path)
         for sub_folder in sub_folders:
             tmp_dir = os.path.join(self.image_path, sub_folder)
-            image_files = [os.path.join(tmp_dir, img) for img in os.listdir(tmp_dir) if img != 'info.json']
+            self.image_files = [os.path.join(tmp_dir, img) for img in os.listdir(tmp_dir) if img != 'info.json']
 
             # Loop through all image paths and add Sample object to data_sample list
             # Sample object contains:
             # image: np.array (resized, black boarders)
             # label: np.array (mapped with CLASSES_MAP from Settings.py
-            for image in image_files:
+            for image in self.image_files:
                 extracted_dir = os.path.dirname(image)
                 chord_label = os.path.basename(extracted_dir)
                 tmp_label = self.generate_label(chord_label)
                 self.data_samples.append(Sample(image, tmp_label))
+                pass
 
         print("Data loaded.")
 
@@ -116,3 +118,4 @@ class Dataset(keras.utils.Sequence):
         self.indexes = np.arange(len(self.data_samples))
         if self.shuffle:
             np.random.shuffle(self.indexes)
+

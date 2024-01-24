@@ -11,6 +11,7 @@ from tensorflow.keras.losses import BinaryCrossentropy
 from src.train_model.CustomCallback import CustomCallback
 from Settings import ROOT_DIR
 from src.train_model.TFBaseModel import TFBaseModel
+from src.train_model.VisualizeResults import plot_loss, plot_accuracy
 
 
 class ChordDetectionVGG16(TFBaseModel):
@@ -41,7 +42,7 @@ class ChordDetectionVGG16(TFBaseModel):
         model.add(Dense(units=1024, activation='relu'))
         model.add(Dropout(0.5))
         model.add(Dense(units=128, activation='relu'))
-        model.add(Dense(units=16, activation='relu'))
+        model.add(Dense(units=32, activation='relu'))
         model.add(Dense(units=11, activation='softmax'))
 
         self.model = model
@@ -50,17 +51,20 @@ class ChordDetectionVGG16(TFBaseModel):
             self,
             train_data: keras.utils.Sequence,
             val_data: keras.utils.Sequence,
-            batch_size: int = 32,
-            max_epochs: int = 100
+            batch_size: int = 64,
+            max_epochs: int = 5
     ):
         self.model.compile(
             optimizer=Adam(learning_rate=1e-3),
             loss=BinaryCrossentropy(),
-            metrics=['acc']
+            metrics=['acc', 'categorical_accuracy']
         )
 
         log_path = os.path.join(ROOT_DIR, 'output/vgg/logs')
-        model_path = os.path.join(ROOT_DIR, 'output/vgg/bestModel')
+        model_path = os.path.join(ROOT_DIR, 'output/vgg/model')
+
+        # Start tensorboard on localhost with
+        # tensorboard --logdir=./output/vgg/logs
 
         callbacks = [
             keras.callbacks.TensorBoard(
@@ -74,9 +78,17 @@ class ChordDetectionVGG16(TFBaseModel):
             )
         ]
 
-        self.model.fit(
+        history = self.model.fit(
             x=train_data,
             validation_data=val_data,
             callbacks=callbacks,
             epochs=max_epochs
         )
+
+        # TFBaseModel class contains save function, refactor later
+        self.model.save('output/vgg/model/vgg16_model_v4.h5')
+        self.model.save('output/vgg/model/vgg16_model_v4.keras')
+
+        plot_accuracy(history)
+        plot_loss(history)
+
