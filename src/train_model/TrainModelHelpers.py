@@ -16,7 +16,7 @@ from src.data.ImageHelpers import get_index
 amount_of_images = 0
 
 
-def resize_image(image):
+def resize_image(image) -> np.ndarray:
     """
     This function returns a single image resized to 224x224 and
     with black paddings on top and bottom to avoid distorting
