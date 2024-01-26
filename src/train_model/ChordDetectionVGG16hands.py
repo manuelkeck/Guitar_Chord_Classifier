@@ -36,13 +36,9 @@ class ChordDetectionVGG16hands(TFBaseModel):
         model.add(vgg_model)
 
         input_rgb = Input(shape=(224, 224, 3))
-        input_mask = Input(shape=(224, 224, 21))
+        input_map = Input(shape=(224, 224, 21))
 
-        # Add stages to VGG16
-        # concatenate-layer
-        # (32, 224, 224, landmarks+3)
         # https://keras.io/api/layers/merging_layers/concatenate/
-
 
         # img -> vgg16
         # mask -> vgg16
@@ -51,7 +47,6 @@ class ChordDetectionVGG16hands(TFBaseModel):
 
         # image + mask = concat -> vgg16
         # layers
-
 
         model.add(Flatten())
         model.add(Dense(units=1024, activation='relu'))

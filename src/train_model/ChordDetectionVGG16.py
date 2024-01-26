@@ -35,9 +35,6 @@ class ChordDetectionVGG16(TFBaseModel):
         vgg_model = self.get_vgg16_topless()
         model.add(vgg_model)
 
-        # Add stages to VGG16
-        # concatenate-layer
-        # (32, 224, 224, landmarks+3)
         model.add(Flatten())
         model.add(Dense(units=1024, activation='relu'))
         model.add(Dropout(0.5))
