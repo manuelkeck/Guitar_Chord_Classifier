@@ -1,11 +1,8 @@
 """
 Author: Manuel Keck
 """
-from typing import Tuple
-
 import mediapipe as mp
 import numpy as np
-import matplotlib.pyplot as plt
 import cv2
 
 # Init mediapipe hands

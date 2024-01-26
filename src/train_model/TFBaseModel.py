@@ -44,9 +44,9 @@ class TFBaseModel(ABC):
     @abstractmethod
     def train(
             self,
-            trainDataset: keras.utils.Sequence,
-            testDataset: keras.utils.Sequence,
-            maxEpochs: int = 100
+            train_dataset: keras.utils.Sequence,
+            test_dataset: keras.utils.Sequence,
+            max_epochs: int = 100
     ):
         raise Exception("Not Implemented!")
 

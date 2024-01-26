@@ -10,7 +10,7 @@ def main():
     :return: None
     """
     app = GUIApp()
-    app.protocol("WM_DELETE_WINDOW", GUIApp.on_closing)
+    app.protocol("WM_DELETE_WINDOW", app.on_closing)
     app.mainloop()
 
 

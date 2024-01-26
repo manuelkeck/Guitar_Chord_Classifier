@@ -15,13 +15,14 @@ from PIL import Image
 
 
 def main():
-    image_path = os.path.join(IMAGE_DIR, "training/A/A-293.jpg")
+    # image_path = os.path.join(IMAGE_DIR, "training/A/A-293.jpg")
     # image_path = os.path.join(IMAGE_DIR, "training/None/None-1.jpg")
-    image = resize_image(np.asarray(Image.open(image_path)))
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    detect_hand(image)
+    # image = resize_image(np.asarray(Image.open(image_path)))
+    # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    # detect_hand(image) -> return list of heatmap arrays per image
 
-    # chord_detector = ChordDetectionVGG16hands()
+    chord_detector = ChordDetectionVGG16hands()
+    chord_detector.model.summary()
     # chord_detector.train(train_dataset, test_dataset)
 
     pass

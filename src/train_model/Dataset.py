@@ -5,7 +5,6 @@ https://www.tensorflow.org/api_docs/python/tf/keras/utils/Sequence
 import os
 import numpy as np
 
-from matplotlib import pyplot as plt
 from tensorflow import keras as keras
 from typing import Optional, Callable, List, Tuple
 from Settings import CLASSES_MAP
@@ -52,35 +51,8 @@ class Dataset(keras.utils.Sequence):
 
         print("Data loaded.")
 
-        # Test output to check image from data_samples
-        # img = self.data_samples[0].image
-        # plt.imshow(img)
-        # plt.show()
-
-    pass
-
     def __len__(self):
         return int(np.floor(len(self.data_samples) / self.batch_size))
-
-    # def __getitem__(self, index):
-    #     """
-    #     Create 'mini batches' from image data for training
-    #     """
-    #     batch_x = self.img_samples[index * self.batch_size:(index + 1) * self.batch_size]
-    #     batch_y = self.labels[index * self.batch_size:(index + 1) * self.batch_size]
-    #
-    #     # x = images for mini batch
-    #     # y = corresponding label
-    #     x = np.zeros((len(batch_x), *self.input_shape))
-    #     y = [None] * len(batch_x)
-    #
-    #     for i, image_path in enumerate(batch_x):
-    #         image = cv2.imread(image_path)
-    #         image = self.resize_image(image)    # redundant, refactoring needed
-    #         x[i] = image / 255.0
-    #         y[i] = self.generate_label(batch_y[i])  # redundant, refactoring needed
-    #
-    #     return x, np.array(y)
 
     def __getitem__(self, index):
         indexes = self.indexes[index * self.batch_size:(index + 1) * self.batch_size]
@@ -110,7 +82,7 @@ class Dataset(keras.utils.Sequence):
 
         return np.array(labels)
 
-    def generate_sample(self, index : int) -> Tuple[np.ndarray, np.ndarray]:
+    def generate_sample(self, index: int) -> Tuple[np.ndarray, np.ndarray]:
         # input_img, label =
         pass
 

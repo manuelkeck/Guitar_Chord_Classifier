@@ -24,14 +24,14 @@ from src.train_model.LoadData import val_dataset
 # model_vgg16 = ChordDetectionVGG16()
 
 # Load model
-path = os.path.join(ROOT_DIR, "output/vgg/model/vgg16_model_v4.keras")
+path = os.path.join(ROOT_DIR, "output/vgg/model/vgg16_model_v3.keras")
 # model_vgg16.load_model(path)
 model = ChordDetectionVGG16()
 model.load_model(path)
 # model.summary()
 
 # Load image (image is 16:9 and BGR)
-image_path = os.path.join(IMAGE_DIR, 'validation/None/None-9.jpg')
+image_path = os.path.join(IMAGE_DIR, 'validation/D/D-205.jpg')
 
 # Resize image: result will be 224x224 with black borders (to keep 16:9 original format)
 img = resize_image(np.asarray(Image.open(image_path)))

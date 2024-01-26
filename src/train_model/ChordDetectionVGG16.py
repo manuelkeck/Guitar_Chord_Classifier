@@ -47,7 +47,7 @@ class ChordDetectionVGG16(TFBaseModel):
     def train(
             self,
             train_data: keras.utils.Sequence,
-            val_data: keras.utils.Sequence,
+            test_data: keras.utils.Sequence,
             batch_size: int = 64,
             max_epochs: int = 5
     ):
@@ -77,7 +77,7 @@ class ChordDetectionVGG16(TFBaseModel):
 
         history = self.model.fit(
             x=train_data,
-            validation_data=val_data,
+            validation_data=test_data,
             callbacks=callbacks,
             epochs=max_epochs
         )

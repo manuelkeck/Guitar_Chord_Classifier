@@ -15,3 +15,7 @@ test_dataset = Dataset(test_images_path)
 val_images_path = os.path.join(IMAGE_DIR, "validation/")
 val_dataset = Dataset(val_images_path)
 
+
+def training_heatmaps():
+    pass
+
