@@ -38,6 +38,14 @@ def detect_hand(image: np.ndarray):
         plt.imshow(image)
         plt.show()
 
+        mask_list = []
+        for i in results.multi_hand_landmarks:
+            mask = np.array(224, 224)
+
+
+        # How to save additional info?
+        # What does keras concatenate layer need?
+
         pass
 
 

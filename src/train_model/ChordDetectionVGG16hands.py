@@ -5,7 +5,7 @@ import os.path
 
 from tensorflow import keras as keras
 from tensorflow.keras.applications.vgg16 import VGG16
-from tensorflow.keras.layers import Flatten, Dense, Dropout
+from tensorflow.keras.layers import Flatten, Dense, Dropout, Input
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import BinaryCrossentropy
 from src.train_model.CustomCallback import CustomCallback
@@ -35,10 +35,23 @@ class ChordDetectionVGG16hands(TFBaseModel):
         vgg_model = self.get_vgg16_topless()
         model.add(vgg_model)
 
+        input_rgb = Input(shape=(224, 224, 3))
+        input_mask = Input(shape=(224, 224, 21))
+
         # Add stages to VGG16
         # concatenate-layer
         # (32, 224, 224, landmarks+3)
         # https://keras.io/api/layers/merging_layers/concatenate/
+
+
+        # img -> vgg16
+        # mask -> vgg16
+        # concat
+        # layers
+
+        # image + mask = concat -> vgg16
+        # layers
+
 
         model.add(Flatten())
         model.add(Dense(units=1024, activation='relu'))
