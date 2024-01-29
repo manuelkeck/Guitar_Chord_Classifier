@@ -6,13 +6,19 @@ import time
 import _thread
 import cv2
 import mediapipe as mp
+import os.path
 
 from tkinter import ttk
+
+import numpy as np
 from screeninfo import get_monitors
 from src.user_interface.GUIAppController import GUIAppController
 from src.device_handler.Camera import Camera
+from src.train_model.ChordDetectionVGG16 import ChordDetectionVGG16
+from src.train_model.TrainModelHelpers import resize_image
 from PIL import Image, ImageTk, ImageOps
-from Settings import DURATION, CLASSES, AMOUNT
+from Settings import DURATION, CLASSES, AMOUNT, ROOT_DIR, CLASSES_MAP
+from tensorflow.keras.applications.vgg16 import preprocess_input
 
 # Init mediapipe hands
 mp_hands = mp.solutions.hands
@@ -23,14 +29,21 @@ hands = mp_hands.Hands(
     min_tracking_confidence=0.5)
 mp_drawing = mp.solutions.drawing_utils
 
+# Load model
+path = os.path.join(ROOT_DIR, "output/vgg/model/vgg16_model_v4.keras")
+model = ChordDetectionVGG16()
+model.load_model(path)
+
 
 class GUIApp(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.chord_text = None
         self.title("Recording Tool")
         self.controller = GUIAppController(self)
         self.camera = Camera(self, self.controller)
         self.recalculated_width, self.recalculated_height = None, None
+        self.predicted_chord: str = ''
 
         # Windows size and positioning (based on user's main screen)
         window_height = 560
@@ -59,6 +72,7 @@ class GUIApp(tk.Tk):
         self.camera_label.pack(padx=5, pady=10, anchor="n")
         self.video_label = tk.Label(self.left_frame, width=348, height=194)
         self.video_label.pack(pady=3)
+        self.canvas = tk.Canvas(self.video_label, width=50, height=50, borderwidth=0, highlightthickness=0)
         self.after(100, self.delayed_aspect_ratio)
         self.after(100, self.update_camera)
         self.landmark_image = tk.Label(self.left_frame, width=348, height=194)
@@ -103,7 +117,8 @@ class GUIApp(tk.Tk):
         self.record_button.pack(padx=5, anchor="e", side="right")
         self.create_button = ttk.Button(self.recording_frame, text="Create", command=self.open_popup)
         self.create_button.pack(padx=5, anchor="e", side="right")
-        self.chord_classifier_button = ttk.Button(self.recording_frame, text="Chord Classifier", command=self.toggle_view)
+        self.chord_classifier_button = ttk.Button(self.recording_frame, text="Chord Classifier",
+                                                  command=self.toggle_view)
         self.chord_classifier_button.pack(padx=5, anchor="e", side="left")
 
         self.bottom_frame.pack_propagate(False)
@@ -197,7 +212,8 @@ class GUIApp(tk.Tk):
         video_aspect = frame.shape[1] / frame.shape[0]
         print(f"Identified webcam resolution: {frame.shape[1]} x {frame.shape[0]}. Aspect ratio: {video_aspect}")
         label_aspect = self.video_label.winfo_width() / self.video_label.winfo_height()
-        print(f"Label: {self.video_label.winfo_width()} x {self.video_label.winfo_height()}. Aspect ratio: {label_aspect}")
+        print(
+            f"Label: {self.video_label.winfo_width()} x {self.video_label.winfo_height()}. Aspect ratio: {label_aspect}")
 
         # Scale width or height based on calculated formats
         if label_aspect > video_aspect:
@@ -216,44 +232,50 @@ class GUIApp(tk.Tk):
         self.recalculated_width, self.recalculated_height = self.aspect_ratio()
 
     def update_camera(self):
-        if self.chord_classifier_button.cget("text") == "Chord Classifier":
-            frame = self.camera.get_frame()
-            if frame is not None:
-                frame = cv2.flip(frame, 1)
-                img = Image.fromarray(frame)
-                img = img.resize((self.recalculated_width, self.recalculated_height), Image.LANCZOS)
-                img = ImageOps.pad(img, (
-                    self.video_label.winfo_width(),
-                    self.video_label.winfo_height()
-                ), color='black')
-                img = ImageTk.PhotoImage(img)
-                self.video_label.configure(image=img)
-                self.video_label.image = img
-            self.after(10, self.update_camera)
-        else:
-            frame = self.camera.get_frame()
-            if frame is not None:
-                image = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
-                image.flags.writeable = False
-                results = hands.process(image)
+        frame = self.camera.get_frame()
 
-                # Draw the hand annotations on the image
-                image.flags.writeable = True
-                image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-                if results.multi_hand_landmarks:
-                    for hand_landmarks in results.multi_hand_landmarks:
-                        mp_drawing.draw_landmarks(
-                            image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+        if frame is not None:
+            frame = cv2.flip(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), 1)
 
-                img = Image.fromarray(image)
-                img = img.resize((self.recalculated_width, self.recalculated_height), Image.LANCZOS)
-                img = ImageOps.pad(img, (
-                    self.video_label.winfo_width(),
-                    self.video_label.winfo_height()
-                ), color='black')
-                img = ImageTk.PhotoImage(image=img)
-                self.video_label.configure(image=img)
-                self.video_label.image = img
+            if self.chord_classifier_button.cget("text") == "Recording Tool":
+                # Chord detection:
+                image = resize_image(frame)
+                x = np.expand_dims(image, axis=0)
+                x = preprocess_input(x)
+                prediction = model.predict(x)[0]
+                class_index = np.argmax(prediction)
+                if prediction[class_index] > 0.9:
+                    if class_index == 10:
+                        self.predicted_chord = 'None'
+                        print(f"Chord: {self.predicted_chord}")
+                    for chord, i in CLASSES_MAP.items():
+                        if i == class_index:
+                            if chord != self.predicted_chord or self.predicted_chord == '':
+                                self.predicted_chord = chord
+                                print(f"Chord: {self.predicted_chord}")
+                                self.canvas.itemconfig(self.chord_text, text=chord)
+
+                # Hand detection:
+                # frame.flags.writeable = False
+                # results = hands.process(frame)
+                #
+                # # Draw the hand annotations on the image
+                # frame.flags.writeable = True
+                # frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+                # if results.multi_hand_landmarks:
+                #     for hand_landmarks in results.multi_hand_landmarks:
+                #         mp_drawing.draw_landmarks(
+                #             frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+
+            img = Image.fromarray(frame)
+            img = img.resize((self.recalculated_width, self.recalculated_height), Image.LANCZOS)
+            img = ImageOps.pad(img, (
+                self.video_label.winfo_width(),
+                self.video_label.winfo_height()
+            ), color='black')
+            img = ImageTk.PhotoImage(img)
+            self.video_label.configure(image=img)
+            self.video_label.image = img
             self.after(10, self.update_camera)
 
     def on_closing(self):
@@ -272,9 +294,16 @@ class GUIApp(tk.Tk):
 
             # Resize camera preview
             self.left_frame.pack_propagate(True)
-            self.video_label.config(width=self.video_label.winfo_width() * 2, height=self.video_label.winfo_height() * 2)
+            self.video_label.config(width=self.video_label.winfo_width() * 2,
+                                    height=self.video_label.winfo_height() * 2)
 
             self.chord_classifier_button.config(text="Recording Tool")
+
+            # Create chord prediction display
+            # self.canvas.pack(anchor='ne')
+            self.canvas.place(in_=self.video_label, relx=1.0, rely=0.0, anchor='ne')
+            self.canvas.create_rectangle(0, 0, 50, 50, fill='black')
+            self.chord_text = self.canvas.create_text(25, 25, text='-', fill='white', font=('Helvetica', 16))
 
         else:
             # Show elements
@@ -293,3 +322,6 @@ class GUIApp(tk.Tk):
             # Repack left frame
             self.left_frame.config(width=400, height=300)
             self.left_frame.pack(side="left", fill="both", expand=True)
+
+            # Destroy chord display
+            self.canvas.pack_forget()
