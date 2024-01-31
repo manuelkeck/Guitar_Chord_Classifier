@@ -30,7 +30,7 @@ hands = mp_hands.Hands(
 mp_drawing = mp.solutions.drawing_utils
 
 # Load model
-path = os.path.join(ROOT_DIR, "output/vgg/model/vgg16_model_v4.keras")
+path = os.path.join(ROOT_DIR, "models/chord_video_detector/vgg16_model_v4.keras")
 model = ChordDetectionVGG16()
 model.load_model(path)
 
@@ -235,7 +235,7 @@ class GUIApp(tk.Tk):
         frame = self.camera.get_frame()
 
         if frame is not None:
-            frame = cv2.flip(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), 1)
+            # frame = cv2.flip(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), 0)
 
             if self.chord_classifier_button.cget("text") == "Recording Tool":
                 # Chord detection:
@@ -276,7 +276,7 @@ class GUIApp(tk.Tk):
             img = ImageTk.PhotoImage(img)
             self.video_label.configure(image=img)
             self.video_label.image = img
-            self.after(10, self.update_camera)
+            self.after(100, self.update_camera)
 
     def on_closing(self):
         self.camera.release()

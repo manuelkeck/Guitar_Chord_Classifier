@@ -31,14 +31,6 @@ class ChordDetectionVGG16hands(TFBaseModel):
         return model
 
     def define_model(self):
-        model = keras.models.Sequential()
-        vgg_model = self.get_vgg16_topless()
-
-        input_rgb = Input(shape=(224, 224, 3))
-        input_map = Input(shape=(224, 224, 21))
-
-        # https://keras.io/api/layers/merging_layers/concatenate/
-
         # img -> vgg16
         # mask -> vgg16
         # concat
@@ -46,11 +38,20 @@ class ChordDetectionVGG16hands(TFBaseModel):
 
         # image + mask = concat -> vgg16
         # layers
-        model.add(vgg_model)
 
-        concatenated_input = Concatenate(axis=-1)([input_rgb, input_map])
+        model = keras.models.Sequential()
+        vgg_model = self.get_vgg16_topless()
 
-        model.add(Flatten()(concatenated_input))
+        input_rgb = Input(shape=(224, 224, 3), name='input_images')
+        input_map = Input(shape=(224, 224, 21), name='input_heatmaps')
+
+        # model.add(vgg_model)
+
+        concatenated_input1 = Concatenate(axis=-1)([vgg_model, input_rgb])
+        concatenated_input2 = Concatenate(axis=-1)([vgg_model, input_map])
+        concatenated_input_total = Concatenate(axis=-1)([concatenated_input1, concatenated_input2])
+
+        model.add(Flatten()(concatenated_input_total))
         model.add(Dense(units=1024, activation='relu'))
         model.add(Dropout(0.5))
         model.add(Dense(units=128, activation='relu'))
@@ -62,7 +63,8 @@ class ChordDetectionVGG16hands(TFBaseModel):
     def train(
             self,
             train_data: keras.utils.Sequence,
-            test_data: keras.utils.Sequence,
+            heatmaps: list,
+            val_data: keras.utils.Sequence,
             batch_size: int = 64,
             max_epochs: int = 5
     ):
@@ -91,7 +93,7 @@ class ChordDetectionVGG16hands(TFBaseModel):
         ]
 
         history = self.model.fit(
-            x=train_data,
+            x=[train_data, heatmaps],
             y=None,
             validation_data=val_data,
             callbacks=callbacks,

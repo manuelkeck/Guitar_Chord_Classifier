@@ -10,3 +10,4 @@ data/records/
 __pycache__/
 output/
 /.venv/
+/models/chord_video_detector/

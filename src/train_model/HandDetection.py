@@ -5,6 +5,8 @@ import mediapipe as mp
 import numpy as np
 import cv2
 
+from typing import Tuple
+
 # Init mediapipe hands
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
@@ -15,8 +17,9 @@ hands = mp_hands.Hands(
 mp_drawing = mp.solutions.drawing_utils
 
 
-def detect_hand(image: np.ndarray) -> list:
+def detect_hand(image: np.ndarray) -> Tuple[list, int]:
     results = hands.process(image)
+    check_var = 0
 
     if results.multi_hand_landmarks is not None:
         # Get and draw landmarks
@@ -26,7 +29,21 @@ def detect_hand(image: np.ndarray) -> list:
         # cv2.destroyAllWindows()
 
         # Create heatmap with identified landmarks
-        return create_heatmap(results.multi_hand_landmarks)
+        # return create_heatmap(results.multi_hand_landmarks), check_var
+        return [], check_var
+
+    else:
+        # max_amount_landmarks = 21
+        # iterator = 0
+        # empty_heatmaps_list = []
+        #
+        # while iterator < max_amount_landmarks:
+        #     empty_heatmaps_list.append(np.zeros((224, 224)))
+        #     iterator += 1
+        #
+        check_var = 1
+        # return empty_heatmaps_list, check_var
+        return [], check_var
 
 
 def draw_landmarks(image: np.ndarray, results: list) -> np.ndarray:
