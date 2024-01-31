@@ -23,7 +23,8 @@ def resize_image(image) -> np.ndarray:
     original image.
     param: return: Squared image with 16:9 original image and black boarders
     """
-    input_shape = [224, 224, 3]
+    # input_shape = [224, 224, 3]
+    input_shape = [640, 640, 3]
 
     # Scaling factors
     scale_x = input_shape[0] / image.shape[1]

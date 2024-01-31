@@ -29,21 +29,19 @@ def detect_hand(image: np.ndarray) -> Tuple[list, int]:
         # cv2.destroyAllWindows()
 
         # Create heatmap with identified landmarks
-        # return create_heatmap(results.multi_hand_landmarks), check_var
-        return [], check_var
+        return create_heatmap(results.multi_hand_landmarks), check_var
 
     else:
-        # max_amount_landmarks = 21
-        # iterator = 0
-        # empty_heatmaps_list = []
-        #
-        # while iterator < max_amount_landmarks:
-        #     empty_heatmaps_list.append(np.zeros((224, 224)))
-        #     iterator += 1
-        #
+        max_amount_landmarks = 21
+        iterator = 0
+        empty_heatmaps_list = []
+
+        while iterator < max_amount_landmarks:
+            empty_heatmaps_list.append(np.zeros((640, 640)))
+            iterator += 1
+
         check_var = 1
-        # return empty_heatmaps_list, check_var
-        return [], check_var
+        return empty_heatmaps_list, check_var
 
 
 def draw_landmarks(image: np.ndarray, results: list) -> np.ndarray:
@@ -60,10 +58,10 @@ def create_heatmap(results: list) -> list:
         counter = 0
         for hand_landmarks in results:
             for ids, lm in enumerate(hand_landmarks.landmark):
-                heatmap_array = np.zeros((224, 224))
+                heatmap_array = np.zeros((640, 640))
                 counter += 1
-                x_norm = int(lm.x * 224)
-                y_norm = int(lm.y * 224)
+                x_norm = np.clip(int(lm.x * 640), 0, 639)
+                y_norm = np.clip(int(lm.y * 640), 0, 639)
                 heatmap_array[y_norm][x_norm] = 1.0
 
                 # Create heatmap with gaussian blur
@@ -80,7 +78,7 @@ def create_heatmap(results: list) -> list:
         # correct dimension in CNN architecture concatenate layer/input layer
         if counter < 21:
             while counter < 21:
-                heatmap_array = np.zeros((224, 224))
+                heatmap_array = np.zeros((640, 640))
                 heatmap_list.append(heatmap_array)
                 counter += 1
 

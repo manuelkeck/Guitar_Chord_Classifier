@@ -8,7 +8,7 @@ import numpy as np
 from Settings import IMAGE_DIR
 from src.train_model.Dataset import Dataset
 from src.train_model.HandDetection import detect_hand
-from src.train_model.TrainModelHelpers import get_sub_folders
+from src.train_model.TrainModelHelpers import get_sub_folders, resize_image
 from PIL import Image
 
 
@@ -56,11 +56,21 @@ def load_full_size_images(folder_path) -> list:
     return images
 
 
+def add_black_boarders(images: list) -> list:
+    resized_images = []
+    for image in images:
+        resized_images.append(resize_image(image))
+
+    return resized_images
+
+
 train_images_path = os.path.join(IMAGE_DIR, "training/")
 train_dataset = Dataset(train_images_path)
 list_of_list_with_img_paths = load_full_size_images(train_images_path)
 list_of_full_size_images = convert_img_paths_to_numpy_arrays(list_of_list_with_img_paths)
-train_dataset_heatmaps = create_heatmaps_list(list_of_full_size_images)
+list_of_squared_images = add_black_boarders(list_of_full_size_images)
+pass
+train_dataset_heatmaps = create_heatmaps_list(list_of_squared_images)
 
 pass
 
