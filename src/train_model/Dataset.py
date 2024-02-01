@@ -30,8 +30,6 @@ class Dataset(keras.utils.Sequence):
         self.on_epoch_end()
 
     def load_data(self):
-        print("Loading data...")
-
         # Loop through all dirs to append training image paths to image_files
         sub_folders = get_sub_folders(self.image_path)
         for sub_folder in sub_folders:
@@ -47,9 +45,6 @@ class Dataset(keras.utils.Sequence):
                 chord_label = os.path.basename(extracted_dir)
                 tmp_label = self.generate_label(chord_label)
                 self.data_samples.append(Sample(image, tmp_label))
-                pass
-
-        print("Data loaded.")
 
     def __len__(self):
         return int(np.floor(len(self.data_samples) / self.batch_size))

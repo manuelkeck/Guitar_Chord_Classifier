@@ -73,7 +73,8 @@ class Camera:
         counter = 0
         path = get_folder(chord)
         index = get_index(path)
-        tmp_path = os.path.join(path + f"{chord}-{index}.jpg")
+        pass
+        tmp_path = os.path.join(path + f"training/{chord}/{chord}-{index}.jpg")
 
         # To avoid OpenCV rowBytes == 0 error
         while frame is None and counter < 3:

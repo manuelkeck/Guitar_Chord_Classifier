@@ -64,13 +64,55 @@ def add_black_boarders(images: list) -> list:
     return resized_images
 
 
+def split_list_of_resized_full_size_images(images: list, amount_of_parts) -> list:
+    images_list_len = len(images)
+    part_size = images_list_len // amount_of_parts
+
+    split_list = []
+
+    for i in range(amount_of_parts):
+        start_index = i * part_size
+        end_index = (i + 1) * part_size
+        tmp_split_list = images[start_index:end_index]
+        split_list.append(tmp_split_list)
+
+    return split_list
+
+
+print("Loading training data...")
 train_images_path = os.path.join(IMAGE_DIR, "training/")
 train_dataset = Dataset(train_images_path)
+print("Training data loaded.")
+
+print("Loading list of full size images paths...")
 list_of_list_with_img_paths = load_full_size_images(train_images_path)
+print("Full size images paths loaded.")
+
+print("Loading list of full size images...")
 list_of_full_size_images = convert_img_paths_to_numpy_arrays(list_of_list_with_img_paths)
+print("Full size images loaded.")
+
+print("Loading list of full size images with black boarders (shape: 640x640)")
 list_of_squared_images = add_black_boarders(list_of_full_size_images)
+print("List loaded.")
 pass
-train_dataset_heatmaps = create_heatmaps_list(list_of_squared_images)
+
+# print("Split list due to resource limitation (RAM)...")
+# parts = 100
+# split_list = split_list_of_resized_full_size_images(list_of_squared_images, parts)
+# print(f"List split into {parts} parts.")
+# counter = 0
+# train_dataset_heatmaps = []
+# # for part in split_list:
+# while counter < parts:
+#     print(f"Loading heatmaps from resized images part {counter+1}...")
+#     tmp_item = create_heatmaps_list(split_list[counter])
+#     train_dataset_heatmaps.append(tmp_item)
+#     print(f"Finished with loading heatmaps for part {counter+1}.")
+#     counter += 1
+list_of_heatmaps = create_heatmaps_list(train_dataset)
+print("Heatmaps loaded.")
+
 
 pass
 

@@ -23,7 +23,7 @@ def get_folder(chord: str):
     return os.path.join(IMAGE_DIR + f"{chord}/")
 
 
-def get_index(path: str):
+def get_index(path: str) -> int:
     try:
         file = os.path.join(path + "info.json")
         with open(file, "r") as json_file:
@@ -32,7 +32,7 @@ def get_index(path: str):
         return info_json["index"]
     except FileNotFoundError:
         print("An error occurred in 'get_index'.")
-        return
+        return 0
 
 
 def update_index(path: str, index=0):

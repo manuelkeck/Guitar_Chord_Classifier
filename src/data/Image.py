@@ -43,7 +43,7 @@ class ImageProcessing:
             print("Landmarks found.")
             self.controller.add_text("[Image] Landmarks found.")
             self.save_image(image_path)
-            self.draw_landmarks(results)
+            self.draw_landmarks(results.multi_hand_landmarks)
             self.show_image()
             check_var = True
         else:
