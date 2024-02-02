@@ -30,7 +30,7 @@ hands = mp_hands.Hands(
 mp_drawing = mp.solutions.drawing_utils
 
 # Load model
-path = os.path.join(ROOT_DIR, "output/vgg/model/vgg16_model_v4.keras")
+path = os.path.join(ROOT_DIR, "output/vgg/model/vgg16_model_v3.keras")
 model = ChordDetectionVGG16()
 model.load_model(path)
 
@@ -235,7 +235,8 @@ class GUIApp(tk.Tk):
         frame = self.camera.get_frame()
 
         if frame is not None:
-            frame = cv2.flip(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), 1)
+            # frame = cv2.flip(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), 1)
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             if self.chord_classifier_button.cget("text") == "Recording Tool":
                 # Chord detection:
@@ -276,7 +277,7 @@ class GUIApp(tk.Tk):
             img = ImageTk.PhotoImage(img)
             self.video_label.configure(image=img)
             self.video_label.image = img
-            self.after(10, self.update_camera)
+            self.after(100, self.update_camera)
 
     def on_closing(self):
         self.camera.release()
@@ -310,6 +311,9 @@ class GUIApp(tk.Tk):
             self.right_frame.pack(side="left", fill="both", expand=True)
             self.landmark_image.pack(pady=10, anchor="s")
 
+            # Destroy chord display
+            self.canvas.pack_forget()
+
             # Enable buttons
             self.record_button["state"] = "normal"
             self.create_button["state"] = "normal"
@@ -322,6 +326,3 @@ class GUIApp(tk.Tk):
             # Repack left frame
             self.left_frame.config(width=400, height=300)
             self.left_frame.pack(side="left", fill="both", expand=True)
-
-            # Destroy chord display
-            self.canvas.pack_forget()

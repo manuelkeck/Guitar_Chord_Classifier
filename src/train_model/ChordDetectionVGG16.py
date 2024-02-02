@@ -7,7 +7,7 @@ from tensorflow import keras as keras
 from tensorflow.keras.applications.vgg16 import VGG16
 from tensorflow.keras.layers import Flatten, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.losses import BinaryCrossentropy
+from tensorflow.keras.losses import BinaryCrossentropy, CategoricalCrossentropy
 from src.train_model.CustomCallback import CustomCallback
 from Settings import ROOT_DIR
 from src.train_model.TFBaseModel import TFBaseModel
@@ -39,7 +39,7 @@ class ChordDetectionVGG16(TFBaseModel):
         model.add(Dense(units=1024, activation='relu'))
         model.add(Dropout(0.5))
         model.add(Dense(units=128, activation='relu'))
-        model.add(Dense(units=32, activation='relu'))
+        model.add(Dense(units=16, activation='relu'))
         model.add(Dense(units=11, activation='softmax'))
 
         self.model = model
@@ -48,11 +48,11 @@ class ChordDetectionVGG16(TFBaseModel):
             self,
             train_data: keras.utils.Sequence,
             test_data: keras.utils.Sequence,
-            batch_size: int = 64,
-            max_epochs: int = 5
+            batch_size: int = 4,
+            max_epochs: int = 200
     ):
         self.model.compile(
-            optimizer=Adam(learning_rate=1e-3),
+            optimizer=Adam(learning_rate=1e-4),
             loss=BinaryCrossentropy(),
             metrics=['acc', 'categorical_accuracy']
         )
@@ -83,8 +83,7 @@ class ChordDetectionVGG16(TFBaseModel):
         )
 
         # TFBaseModel class contains save function, refactor later
-        self.model.save('output/vgg/model/vgg16_model_v4.h5')
-        self.model.save('output/vgg/model/vgg16_model_v4.keras')
+        self.model.save('output/vgg/model/vgg16_model_v8.keras')
 
         plot_accuracy(history)
         plot_loss(history)
