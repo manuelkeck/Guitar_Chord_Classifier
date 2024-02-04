@@ -6,6 +6,7 @@ import os
 import numpy as np
 
 from tensorflow import keras as keras
+from keras.preprocessing.image import ImageDataGenerator
 from typing import Optional, Callable, List, Tuple
 from Settings import CLASSES_MAP
 
@@ -14,14 +15,20 @@ from src.train_model.Sample import Sample
 
 
 class Dataset(keras.utils.Sequence):
-    def __init__(self, image_path: str, batch_size: int = 64, shuffle=True, input_shape=(224, 224, 3),
-                 augmentation: bool = False, preprocessing: Optional[Callable] = None):
+    def __init__(self, image_path: str, batch_size: int = 4, shuffle=True, input_shape=(224, 224, 3),
+                 augmentation: bool = True, preprocessing: Optional[Callable] = None):
 
         self.image_path = image_path  # ROOT_DIR/data/images/training/
         self.batch_size = batch_size
         self.shuffle = shuffle
         self.input_shape = input_shape
         self.image_files = []
+
+        self.datagen = ImageDataGenerator(
+            rotation_range=30,
+            contrast_range=[0.5, 1.5],
+            brightness_range=[0.2, 1.0],
+        )
 
         self.data_samples: List[Sample] = []
         self.load_data()
@@ -60,7 +67,7 @@ class Dataset(keras.utils.Sequence):
         labels = []
 
         for index in indexes:
-            # Todo: call method for augmentation and preprocessing if needed
+            # Todo: call method for augmentation
             tmp_img = self.data_samples[index].image
             tmp_img = (tmp_img/255).astype(np.float32)
             input_images.append(tmp_img)

@@ -83,7 +83,7 @@ class ChordDetectionVGG16(TFBaseModel):
         )
 
         # TFBaseModel class contains save function, refactor later
-        self.model.save('output/vgg/model/vgg16_model_v8.keras')
+        self.model.save('output/vgg/model/vgg16_model_v9.keras')
 
         plot_accuracy(history)
         plot_loss(history)
