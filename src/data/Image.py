@@ -28,6 +28,7 @@ class ImageProcessing:
             max_num_hands=1,
             min_detection_confidence=0.1
         )
+        self.mp_drawing = mp.solutions.drawing_utils
         self.rgb_image = None
 
     def get_hand_landmarks(self, image: np.ndarray, image_path: str):
@@ -36,7 +37,8 @@ class ImageProcessing:
         :param image: Image (frame) numpy array
         :param image_path: Where image will be saved
         """
-        self.rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        # self.rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        self.rgb_image = image
         results = self.hands.process(self.rgb_image)
 
         if results.multi_hand_landmarks:
@@ -56,20 +58,23 @@ class ImageProcessing:
 
         return check_var
 
-    def draw_landmarks(self, results):
+    def draw_landmarks(self, results: list):
         # Condition: only one hand visible in image
-        hand_landmarks = results.multi_hand_landmarks[0]
-
-        h, w, _ = self.rgb_image.shape
-
-        for landmark in hand_landmarks.landmark:
-            x, y = int(landmark.x * w), int(landmark.y * h)
-            cv2.circle(self.rgb_image, (x, y), 5, (0, 255, 0), -1)
+        # hand_landmarks = results.multi_hand_landmarks[0]
+        #
+        # h, w, _ = self.rgb_image.shape
+        #
+        # for landmark in hand_landmarks.landmark:
+        #     x, y = int(landmark.x * w), int(landmark.y * h)
+        #     cv2.circle(self.rgb_image, (x, y), 5, (0, 255, 0), -1)
+        for hand_landmarks in results:
+            self.mp_drawing.draw_landmarks(
+                self.rgb_image, hand_landmarks, self.mp_hands.HAND_CONNECTIONS)
 
     def show_image(self):
         # Show captured image on GUI (with landmarks, if found)
-        image = cv2.cvtColor(self.rgb_image, cv2.COLOR_BGR2RGB)
-        image_pil = Image.fromarray(image)
+        # image = cv2.cvtColor(self.rgb_image, cv2.COLOR_BGR2RGB)
+        image_pil = Image.fromarray(self.rgb_image)
 
         # Get UI widget size and calculate ratio
         widget_height = self.gui_app.landmark_image.winfo_height()

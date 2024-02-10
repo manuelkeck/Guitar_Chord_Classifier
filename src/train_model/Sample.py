@@ -13,4 +13,6 @@ class Sample(object):
     """
     def __init__(self, image_path: str, label: np.array):
         self.image = resize_image(cv2.imread(image_path))
+        self.hm = []
         self.label = label
+

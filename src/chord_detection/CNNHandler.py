@@ -48,7 +48,7 @@ class CNN(object):
             pass
         else:
             try:
-                y, sr = librosa.load(filepath, duration=2)
+                y, sr = librosa.load(filepath, duration=3)
                 ps = librosa.feature.melspectrogram(y=y, sr=sr, )
                 shape = (1,) + self.input_shape
                 ps = np.array(ps.reshape(shape))

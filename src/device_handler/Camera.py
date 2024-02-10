@@ -73,8 +73,7 @@ class Camera:
         counter = 0
         path = get_folder(chord)
         index = get_index(path)
-        pass
-        tmp_path = os.path.join(path + f"training/{chord}/{chord}-{index}.jpg")
+        tmp_path = os.path.join(path + f"{chord}-{index}.jpg")
 
         # To avoid OpenCV rowBytes == 0 error
         while frame is None and counter < 3:
@@ -91,7 +90,7 @@ class Camera:
 
             # Send image to crop function
             else:
-                if ImageProcessing.get_hand_landmarks(self.image_processing, frame, tmp_path):
+                if self.image_processing.get_hand_landmarks(frame, tmp_path):
                     print(f"Index in folder for chord {chord} will be updated.")
                     self.controller.add_text(f"[Image] Index in folder for chord {chord} will be updated to {index}.")
                     update_index(path, index+1)

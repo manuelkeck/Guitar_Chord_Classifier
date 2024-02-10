@@ -1,12 +1,15 @@
 """
 Author: Manuel Keck
 """
+import os.path
+
 import librosa
 import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
 
 from scipy.io import wavfile
+from Settings import RECORDING_DIR
 
 
 def plot_spectrogram(file_path):
@@ -27,6 +30,3 @@ def plot_spectrogram2(file_path):
     plt.ylabel("Frequency (Hz)")
     plt.colorbar(label="Amplitude (dB)")
     plt.show(block=True)
-
-
-

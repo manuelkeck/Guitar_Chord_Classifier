@@ -45,6 +45,12 @@ class ChordDetectionVGG16hands(TFBaseModel):
         input_rgb = Input(shape=(224, 224, 3), name='input_images')
         input_map = Input(shape=(224, 224, 21), name='input_heatmaps')
 
+        # sample -> landmark heatmaps
+        # __get_item__ -> heatmap creation
+        # in get item ne liste an heatmap nummpy arrays und die dann später als numpy array umwandeln
+        # erst beides zusammen sodass 224,224,24 entsteht und dann vlt flatten layer und dann vgg16
+        #
+
         # model.add(vgg_model)
 
         concatenated_input1 = Concatenate(axis=-1)([vgg_model, input_rgb])

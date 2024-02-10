@@ -20,7 +20,7 @@ def save_image(image: np.ndarray, image_path: str):
 
 
 def get_folder(chord: str):
-    return os.path.join(IMAGE_DIR + f"{chord}/")
+    return os.path.join(IMAGE_DIR + f"training/{chord}/")
 
 
 def get_index(path: str) -> int:

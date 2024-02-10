@@ -35,11 +35,17 @@ class ChordDetectionVGG16(TFBaseModel):
         vgg_model = self.get_vgg16_topless()
         model.add(vgg_model)
 
+        # architektur vergrößern
+        # augmentation
+        #
+
         model.add(Flatten())
         model.add(Dense(units=1024, activation='relu'))
         model.add(Dropout(0.5))
+        model.add(Dense(units=512, activation='relu'))
+        model.add(Dropout(0.5))
         model.add(Dense(units=128, activation='relu'))
-        model.add(Dense(units=32, activation='relu'))
+        model.add(Dense(units=16, activation='relu'))
         model.add(Dense(units=11, activation='softmax'))
 
         self.model = model
