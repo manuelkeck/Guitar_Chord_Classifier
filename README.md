@@ -1,14 +1,16 @@
 # Guitar Chord Classifier
 
-Jan 2024: This project is still under active development.
+Feb. 2024: This project is still under active development.
 
 The main objective of this project is to create an own dataset with images from guitar chords.
+
+![Image](resources/Result.png)
+
 To achieve this, an existing guitar chord detection is integrated.
 If a chord was detected successfully, an image will be created, labelled and stored. To save the image, 
 the hand (which is performing the chord) will be determined with 
 [Google MediaPipe](https://mediapipe.readthedocs.io/en/latest/index.html) 
-([Hands](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker)). The part in
-original image, which contains the hand, will be cropped and saved.
+([Hands](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker)). 
 
 For chord detection, some parts of this project are integrated: 
 https://github.com/ayushkumarshah/Guitar-Chords-recognition
@@ -61,15 +63,16 @@ to create the virtual enviroment and `source myenv/bin/activate` to activate the
 the requirements within the environment.
 
 ### Part 1: Create dataset(s) with chord images
-This part of the project is in branch `create_dataset`. Switch to this branch with command `git checkout create_dataset`
-in root directory of this project. Start with `python main.py` in branch directory. A Graphical User Interface (GUI) will 
+This part of the project is in branch `train_vgg16`. Switch to this branch with command `git checkout train_vgg16`
+in root directory of this project. Start with `python Recorder.py` in branch directory. A Graphical User Interface (GUI) will 
 be opened.
 
-The GUI will look like this:
-![Image](resources/GUI_Part1.png)
-In this screenshot you can see the camera preview to check the image that will be captured.
+The GUI to create the dataset will look like this (click to watch video):
+
+[<img src="resources/CreatingDatasetThumbnail.png">](resources%2FCreatingDatasetClip.mp4)
+
 After the chord was predicted successfully, an image will be captured and hand landmarks will be drawn
-on it. Based on the landmarks the image will be cropped and presented to check if it is correct.
+on it. Based on the landmarks the image will be presented to check if it is correct.
 If the image is not sufficient, click on 'discard' to discard the record and captured image.
 The images will be used to train an own model in 'Part 2'.
 
@@ -85,9 +88,26 @@ Please be aware, that there is no hand detection in this 'fast-lane' implementat
 will be transformed into a 640x360 px image and saved immediately. You can set the resolution in `Settings.py`.
 
 ### Part 2: Create CNN based on captured images
-To create a CNN which is able to predict the played chord there are two options. First option is, to train
-the model with images from hand performing the chord, which is done in this part of project. Second option
-would be, to save mel-spectrograms of played chord instead of images with hands.
+Based on the dataset (which is uploaded in path data/images/) a CNN was trained. Therefore, VGG16 was used and 
+classification stage replaced with the following architecture:
+
+![Image](resources/ArchitectureVGG16CNN.png)
+
+This part can be discovered in branch `train_vgg16` too, since main branch is still under active development to 
+integrate landmark detection for CNN training.
+
+At the moment, the best model needs up to one minute for training (with NVIDIA RTX3070 Max-Q) and unfortunately it 
+reaches a precision of only 9,4 %.
+In current version, augmentation of data is not implemented. This will be added in later developments with
+hand landmark detection data to train an advanced model (written in Feb. 2024).
+
+Due to file size the model is not uploaded.
+To train the model by yourself, just start `python TrainVGG16.py` in root directory of the project.
+After that, you can add the model to the GUI in `GUIApp.py`. You can find it in `src/user_interface/GUIApp.py` where
+you can add your trained model in line 33.
+
+Then, start GUI application with `python Recorder.py` and click on the button `Chord Classifier` to test your model
+with real conditions.
 
 ## Troubleshooting
 ### Tkinter not found
@@ -141,11 +161,11 @@ Manuel Keck\
 Human-Centered Computing (HUC)\
 Informatics (INF) Faculty\
 Reutlingen University\
-2023
+2024
 
 Contact: manuel.keck@student.reutlingen-university.de
 
-This project is a product of HUC2.5 Bildverarbeitung from Human-Centered Computing (INF) at Reutlingen 
+This project is a product of 'HUC2.4-Bildverarbeitung' from Human-Centered Computing at Reutlingen 
 University.
 
 ## License
